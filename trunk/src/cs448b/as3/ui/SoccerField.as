@@ -1,5 +1,6 @@
 package cs448b.as3.ui
 {
+	import flare.scale.Scale;
 	import flare.scale.ScaleType;
 	import flare.util.palette.ColorPalette;
 	import flare.util.palette.SizePalette;
@@ -135,6 +136,17 @@ package cs448b.as3.ui
 			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
 
             vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
+
+			// set axis values 			
+			vis.xyAxes.xAxis.showLines = false;
+			vis.xyAxes.xAxis.axisScale.max = fieldWidth;
+			vis.xyAxes.xAxis.axisScale.min = 0;
+			vis.xyAxes.xAxis.axisScale.flush = true;
+			
+			vis.xyAxes.yAxis.showLines = false;
+			vis.xyAxes.yAxis.axisScale.max = fieldHeight;
+			vis.xyAxes.yAxis.axisScale.min = 0;
+			vis.xyAxes.yAxis.axisScale.flush = true;
 			
             vis.update();
 		}
