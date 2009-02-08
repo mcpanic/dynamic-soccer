@@ -1,7 +1,7 @@
 package cs448b.as3.ui
 {
-	import flare.animate.Transitioner;
 	import flare.scale.ScaleType;
+	import flare.util.palette.ColorPalette;
 	import flare.vis.Visualization;
 	import flare.vis.data.Data;
 	import flare.vis.operator.encoder.ColorEncoder;
@@ -128,11 +128,10 @@ package cs448b.as3.ui
 
             vis.operators.add(new AxisLayout("data.X", "data.Y"));
             vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
-                "lineColor", ScaleType.CATEGORIES));
-            //vis.operators.add(new ShapeEncoder("data.Goal"));
+                "lineColor", ScaleType.CATEGORIES, 
+                new ColorPalette([0x00000000, 0xffaec7e8, 0xffd62728])));
             vis.data.nodes.setProperties({fillColor:0, lineWidth:2});
-			//trace (data.HomeAway);
-
+			
             vis.update();
 		}
 	}
