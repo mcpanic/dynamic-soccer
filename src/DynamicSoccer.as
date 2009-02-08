@@ -33,8 +33,8 @@ package {
 		public function loadData():void
 		{
 			dataLoader = new DataLoader();
-			dataLoader.loadData();
 			dataLoader.addLoadEventListener(handleLoaded); 
+			dataLoader.loadData();
 		}
 				
 		/**
