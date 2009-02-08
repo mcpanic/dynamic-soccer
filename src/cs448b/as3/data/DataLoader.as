@@ -1,32 +1,38 @@
 package cs448b.as3.data
 {
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.net.URLLoader;
-	import flash.geom.Rectangle;
-	import flash.display.Sprite;
-					
-	import flare.vis.data.Data;
-	import flare.vis.data.NodeSprite;
 	import flare.data.DataSet;
 	import flare.data.DataSource;
-	import flare.vis.Visualization;
-	import flare.vis.operator.encoder.ColorEncoder;
-	import flare.vis.operator.encoder.ShapeEncoder;
-	import flare.vis.operator.layout.AxisLayout;
 	import flare.scale.ScaleType;
+	import flare.vis.Visualization;
+	import flare.vis.data.Data;
+	import flare.vis.operator.encoder.ColorEncoder;
+	import flare.vis.operator.layout.AxisLayout;
+	
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Rectangle;
+	import flash.net.URLLoader;
 			
 	public class DataLoader extends Sprite
 	{
+		private var dataAddress:String;
+		private var data:Data;
+		
 		public function DataLoader()
 		{
-			loadData();
+			dataAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/goal.txt";
 		}
-        private function loadData():void
+		
+		public function getData():Data
+		{
+			return data;
+		}
+		
+        public function loadData():void
         {
         	// Import data in tab-delimited format
         	// Other supported formats:  "json" for JASN, "graphml" for GraphML
-            var ds:DataSource = new DataSource( "http://www.stanford.edu/~juhokim/dynamicsoccer/goal.txt", "tab" );
+            var ds:DataSource = new DataSource( dataAddress, "tab" );
             
             // Load the dataset asynchronuously 
             var loader:URLLoader = ds.load();
@@ -36,7 +42,7 @@ package cs448b.as3.data
             	function( evt:Event ):void
             	{
 	                var dataSet:DataSet = loader.data as DataSet;
-	                var data:Data;
+	                //var data:Data;
 	                
 	                // Use default function to import data
 	                data = Data.fromDataSet( dataSet );
@@ -67,20 +73,22 @@ package cs448b.as3.data
 					// Only here to demonstrate the use of createEdges
 					data.createEdges( "data.date", "data.cause" );
 */	                
-    	            testData( data );
+					testData();
             	}
             );
         }		
 
+/* Temporary test visualization function - TO BE DELETED */
+
        	private var vis:Visualization;   
        	        
-        private function testData( data:Data ):void
+        public function testData():void
         {     	
             vis = new Visualization(data);
             vis.bounds = new Rectangle(0, 0, 600, 500);
             vis.x = 100;
             vis.y = 50;
-            this.addChild(vis);
+            addChild(vis);
  
             vis.operators.add(new AxisLayout("data.X", "data.Y"));
             vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
