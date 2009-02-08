@@ -65,7 +65,7 @@ package {
 		 */
 		public function handleLoaded( evt:Event ):void
 		{
-			soccerField.drawPoints(dataLoader.getData());
+			soccerField.drawPoints(dataLoader.data);
 		}
 	}
 }

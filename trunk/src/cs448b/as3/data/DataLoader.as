@@ -18,7 +18,7 @@ package cs448b.as3.data
 	public class DataLoader extends Sprite
 	{
 		private var dataAddress:String;
-		private var data:Data;
+		private var _data:Data;
 		private var ds:DataSource;
 		private var loader:URLLoader;
 
@@ -31,9 +31,9 @@ package cs448b.as3.data
 
 		}
 		
-		public function getData():Data
+		public function get data():Data
 		{
-			return data;
+			return _data;
 		}
 		
         public function loadData():void
@@ -52,7 +52,7 @@ package cs448b.as3.data
 	                var dataSet:DataSet = loader.data as DataSet;
 	                
 	                // Use default function to import data
-	                data = Data.fromDataSet( dataSet );
+	                _data = Data.fromDataSet( dataSet );
            
 					//testData();
 					
@@ -77,14 +77,14 @@ package cs448b.as3.data
        	        
         public function testData():void
         {     	
-            vis = new Visualization(data);
+            vis = new Visualization(_data);
             vis.bounds = new Rectangle(0, 0, 600, 500);
             vis.x = 100;
             vis.y = 50;
             addChild(vis);
  
-            vis.operators.add(new AxisLayout("data.X", "data.Y"));
-            vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
+            vis.operators.add(new AxisLayout("_data.X", "_data.Y"));
+            vis.operators.add(new ColorEncoder("_data.Goal", Data.NODES,
                 "lineColor", ScaleType.CATEGORIES));
             //vis.operators.add(new ShapeEncoder("data.Goal"));
             vis.data.nodes.setProperties({fillColor:0, lineWidth:2});
