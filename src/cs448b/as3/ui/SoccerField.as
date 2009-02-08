@@ -138,7 +138,7 @@ package cs448b.as3.ui
                 "lineColor", ScaleType.CATEGORIES, 
                 new ColorPalette([0xafaec7e8, 0xffd62728])));
 			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
-
+			
             vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
 
 			// set axis values 			
@@ -151,11 +151,15 @@ package cs448b.as3.ui
 			vis.xyAxes.yAxis.axisScale.max = fieldHeight;
 			vis.xyAxes.yAxis.axisScale.min = 0;
 			vis.xyAxes.yAxis.axisScale.flush = true;
-			
+
+			vis.operators.add(new VisibilityFilter(gameFilter) );
+            
+            vis.operators[3].immediate = true; // filter immediately!
+            			
             vis.update();
             
-            vis.operators.add( new VisibilityFilter(gameFilter) );
-            
+
+
 		}
 		
 		private function gameFilter(d:DataSprite):Boolean
@@ -166,10 +170,18 @@ package cs448b.as3.ui
 			else if(_gameType == "Single" && d.data.Round == _roundNo) return true;
 			else return false;
 		}
-		
+
+		private var _t:Transitioner;
+		import flare.animate.Transitioner;
 		public function gameType(gt:String):void
 		{
 			_gameType = gt; 
+			
+            vis.update();
+//			if (_t && _t.running) _t.stop();
+//			_t = vis.update(_dur);
+//			_t.play();
+			
 		}
 		
 		public function roundNo(rn:Number):void
@@ -177,4 +189,5 @@ package cs448b.as3.ui
 			_roundNo = rn;
 		}
 	}
+
 }

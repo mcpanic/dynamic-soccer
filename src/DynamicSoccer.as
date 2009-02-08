@@ -50,6 +50,7 @@ package {
 			controls = new Controls();
 			
 			// register callbacks
+			controls.gameType = soccerField.gameType;
 		}
 		
 		/**
