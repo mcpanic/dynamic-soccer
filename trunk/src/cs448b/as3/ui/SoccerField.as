@@ -167,12 +167,12 @@ package cs448b.as3.ui
 			else return false;
 		}
 		
-		public function set gameType(gt:String):void
+		public function gameType(gt:String):void
 		{
 			_gameType = gt; 
 		}
 		
-		public function set roundNo(rn:Number):void
+		public function roundNo(rn:Number):void
 		{
 			_roundNo = rn;
 		}
