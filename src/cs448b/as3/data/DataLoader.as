@@ -1,5 +1,7 @@
 package cs448b.as3.data
 {
+
+	
 	import flare.data.DataSet;
 	import flare.data.DataSource;
 	import flare.scale.ScaleType;
@@ -19,12 +21,14 @@ package cs448b.as3.data
 		private var data:Data;
 		private var ds:DataSource;
 		private var loader:URLLoader;
-		
+
 		private var cb:Function = null;
 		
+
 		public function DataLoader()
 		{
 			dataAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/goal.txt";
+
 		}
 		
 		public function getData():Data
@@ -50,7 +54,7 @@ package cs448b.as3.data
 	                // Use default function to import data
 	                data = Data.fromDataSet( dataSet );
            
-					testData();
+					//testData();
 					
 					if(cb != null) cb( evt );
             	}

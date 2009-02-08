@@ -128,10 +128,7 @@ package cs448b.as3.ui
             vis.x = offset;
             vis.y = offset;
             addChild(vis);
-            
-			// set data in vis 
-//			vis.data(d);
- 
+
             vis.operators.add(new AxisLayout("data.X", "data.Y"));
             vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
                 "lineColor", ScaleType.CATEGORIES));

@@ -1,5 +1,6 @@
 package {
 	import cs448b.as3.data.DataLoader;
+	import cs448b.as3.ui.Controls;
 	import cs448b.as3.ui.SoccerField;
 	
 	import flash.display.Sprite;
@@ -13,7 +14,7 @@ package {
 	{
 		private var soccerField:SoccerField;
 		private var dataLoader:DataLoader;
-		 
+		private var controls:Controls; 
 		/**
 		 * Constructor
 		 */
@@ -25,6 +26,7 @@ package {
 			
 			initComponents();
 			buildSprite();
+			
 		}
 
 		/**
@@ -35,6 +37,7 @@ package {
 			dataLoader = new DataLoader();
 			dataLoader.addLoadEventListener(handleLoaded); 
 			dataLoader.loadData();
+
 		}
 				
 		/**
@@ -43,6 +46,7 @@ package {
 		public function initComponents():void
 		{
 			 soccerField = new SoccerField();
+			controls = new Controls();
 		}
 		
 		/**
@@ -51,6 +55,7 @@ package {
 		public function buildSprite():void
 		{
 			this.addChild(soccerField);
+			this.addChild(controls);
 		}
 
 		/**
