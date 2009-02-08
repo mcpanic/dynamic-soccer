@@ -1,5 +1,6 @@
 package cs448b.as3.ui
 {
+	import flare.animate.Transitioner;
 	import flare.scale.ScaleType;
 	import flare.util.palette.ColorPalette;
 	import flare.util.palette.SizePalette;
@@ -22,9 +23,13 @@ package cs448b.as3.ui
 		
 		private var vis:Visualization = null;
 		
+		// filter values
 		private var _gameType:String = "All";
 		private var _roundNo:Number = 1;
 		
+		private var _playerArray:Array = null;
+		
+		private var _goalType:Number = 2;
 		/**
 		 * Constructor
 		 */
@@ -152,41 +157,77 @@ package cs448b.as3.ui
 			vis.xyAxes.yAxis.axisScale.min = 0;
 			vis.xyAxes.yAxis.axisScale.flush = true;
 
-			vis.operators.add(new VisibilityFilter(gameFilter) );
-            
-            vis.operators[3].immediate = true; // filter immediately!
+			// add filters
+			vis.operators.add(new VisibilityFilter(theFilter));
+//            vis.operators[3].immediate = true; // filter immediately!
             			
             vis.update();
-            
-
-
+		}
+		
+// Visability filter functions
+		private function theFilter(d:DataSprite):Boolean
+		{
+			return gameFilter(d) && playerFilter(d) && goalFilter(d);
 		}
 		
 		private function gameFilter(d:DataSprite):Boolean
 		{
+			trace("gameFilter()");
 			if(_gameType == "All") return true;
 			else if(_gameType == "Home" && d.data.HomeAway == "Home") return true;
 			else if(_gameType == "Away" && d.data.HomeAway == "Away") return true;
 			else if(_gameType == "Single" && d.data.Round == _roundNo) return true;
 			else return false;
 		}
+		
+		private function playerFilter(d:DataSprite):Boolean
+		{
+			if(_playerArray == null) return true;
+			else
+			{
+				for(var i:Number = 0; i < _playerArray.length(); i++)
+				{
+					if(_playerArray[i] as Number == d.data.Player) return true;
+				}
+			}
+			
+			return true;
+		}
+		
+		private function goalFilter(d:DataSprite):Boolean
+		{
+			if(_goalType == 0 && d.data.Goal == "y") return true;
+			else if(_goalType == 1 && (d.data.Goal == "y" || d.data.ShotOnGoal == "y")) return true;
+			else return true;
+		}
 
-		private var _t:Transitioner;
-		import flare.animate.Transitioner;
+// Visability value set functions
 		public function gameType(gt:String):void
 		{
 			_gameType = gt; 
 			
-            vis.update();
-//			if (_t && _t.running) _t.stop();
-//			_t = vis.update(_dur);
-//			_t.play();
-			
+			vis.update(new Transitioner(1)).play();
 		}
 		
 		public function roundNo(rn:Number):void
 		{
 			_roundNo = rn;
+			
+			vis.update(new Transitioner(1)).play();
+		}
+		
+		public function playerNo(pnArray:Array):void
+		{
+			_playerArray = pnArray;
+			
+			vis.update(new Transitioner(1)).play();
+		}
+		
+		public function goalType(gt:Number):void
+		{
+			_goalType = gt;
+			
+			vis.update(new Transitioner(1)).play();
 		}
 	}
 
