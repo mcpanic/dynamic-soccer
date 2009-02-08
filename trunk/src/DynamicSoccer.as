@@ -45,7 +45,7 @@ package {
 		 */
 		public function initComponents():void
 		{
-			 soccerField = new SoccerField();
+			soccerField = new SoccerField();
 			controls = new Controls();
 		}
 		
@@ -54,6 +54,8 @@ package {
 		 */
 		public function buildSprite():void
 		{
+			soccerField.x = 100;
+			soccerField.y = 50;
 			this.addChild(soccerField);
 			this.addChild(controls);
 		}
