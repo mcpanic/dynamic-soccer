@@ -21,6 +21,8 @@ package cs448b.as3.ui
 		private var fieldHeight:Number = 265;
 		private var offset:Number = 5;
 		
+		private var transTime:Number = 0.5;
+		
 		private var vis:Visualization = null;
 		
 		// filter values
@@ -30,6 +32,7 @@ package cs448b.as3.ui
 		private var _playerArray:Array = null;
 		
 		private var _goalType:Number = 2;
+		
 		/**
 		 * Constructor
 		 */
@@ -206,28 +209,28 @@ package cs448b.as3.ui
 		{
 			_gameType = gt; 
 			
-			vis.update(new Transitioner(1)).play();
+			vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function roundNo(rn:Number):void
 		{
 			_roundNo = rn;
 			
-			vis.update(new Transitioner(1)).play();
+			vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function playerNo(pnArray:Array):void
 		{
 			_playerArray = pnArray;
 			
-			vis.update(new Transitioner(1)).play();
+			vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function goalType(gt:Number):void
 		{
 			_goalType = gt;
 			
-			vis.update(new Transitioner(1)).play();
+			vis.update(new Transitioner(transTime)).play();
 		}
 	}
 
