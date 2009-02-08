@@ -31,7 +31,7 @@ package cs448b.as3.ui
 		
 		private var _playerArray:Array = null;
 		
-		private var _goalType:Number = 2;
+		private var _shotType:Number = 2;
 		
 		/**
 		 * Constructor
@@ -175,7 +175,7 @@ package cs448b.as3.ui
 		
 		private function gameFilter(d:DataSprite):Boolean
 		{
-			trace("gameFilter()");
+			//trace("gameFilter()");
 			if(_gameType == "All") return true;
 			else if(_gameType == "Home" && d.data.HomeAway == "Home") return true;
 			else if(_gameType == "Away" && d.data.HomeAway == "Away") return true;
@@ -199,17 +199,18 @@ package cs448b.as3.ui
 		
 		private function goalFilter(d:DataSprite):Boolean
 		{
-			if(_goalType == 0 && d.data.Goal == "y") return true;
-			else if(_goalType == 1 && (d.data.Goal == "y" || d.data.ShotOnGoal == "y")) return true;
-			else return true;
+			if(_shotType == 0 && d.data.Goal == "y") return true;
+			else if(_shotType == 1 && (d.data.Goal == "y" || d.data.ShotOnGoal == "y")) return true;
+			else if(_shotType == 2) return true;
+			else return false;
 		}
 
 // Visability value set functions
 		public function gameType(gt:String):void
 		{
-			_gameType = gt; 
-			
+			_gameType = gt; 		
 			vis.update(new Transitioner(transTime)).play();
+
 		}
 		
 		public function roundNo(rn:Number):void
@@ -226,9 +227,9 @@ package cs448b.as3.ui
 			vis.update(new Transitioner(transTime)).play();
 		}
 		
-		public function goalType(gt:Number):void
+		public function shotType(gt:Number):void
 		{
-			_goalType = gt;
+			_shotType = gt;
 			
 			vis.update(new Transitioner(transTime)).play();
 		}

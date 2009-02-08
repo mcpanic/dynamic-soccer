@@ -8,7 +8,7 @@ package {
 
 	// Convenient way to pass in compiler arguments
 	// Place after import statements and before first class declaration 
-	[SWF(width='800', height='600', backgroundColor='#aaaaaa', frameRate='30')]
+	[SWF(width='1024', height='768', backgroundColor='#aaaaaa', frameRate='30')]
 	
 	public class DynamicSoccer extends Sprite
 	{
@@ -51,6 +51,9 @@ package {
 			
 			// register callbacks
 			controls.gameType = soccerField.gameType;
+			controls.shotType = soccerField.shotType;
+			controls.roundNo = soccerField.roundNo;
+			controls.playerNo = soccerField.playerNo;
 		}
 		
 		/**
