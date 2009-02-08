@@ -17,6 +17,10 @@ package cs448b.as3.data
 	{
 		private var dataAddress:String;
 		private var data:Data;
+		private var ds:DataSource;
+		private var loader:URLLoader;
+		
+		private var cb:Function = null;
 		
 		public function DataLoader()
 		{
@@ -32,51 +36,36 @@ package cs448b.as3.data
         {
         	// Import data in tab-delimited format
         	// Other supported formats:  "json" for JASN, "graphml" for GraphML
-            var ds:DataSource = new DataSource( dataAddress, "tab" );
+            ds = new DataSource( dataAddress, "tab" );
             
             // Load the dataset asynchronuously 
-            var loader:URLLoader = ds.load();
+            loader = ds.load();
             
             // Create an event listen to process the data
             loader.addEventListener( Event.COMPLETE, 
             	function( evt:Event ):void
             	{
 	                var dataSet:DataSet = loader.data as DataSet;
-	                //var data:Data;
 	                
 	                // Use default function to import data
 	                data = Data.fromDataSet( dataSet );
-/*
-					// Create a data structure by processing the nodes table
-					data = new Data();
-					
-					for each ( var d:Object in dataSet.nodes.data )
-					{
-						data.addNode(
-							{
-								Season    : d.Season,
-								Team  : d.Team, 
-								Round   : d.Round, 
-								HomeAway : d.HomeAway, 
-								Time  : d.Time,
-								Player  : d.Player,
-								X   : d.X,
-								Y	: d.Y,
-								Goal : d.Goal,
-								ShotOnGoal : d.ShotOnGoal,
-								PK : d.PK
-							} 
-						);	
-					}
-					
-					// Really meaningful
-					// Only here to demonstrate the use of createEdges
-					data.createEdges( "data.date", "data.cause" );
-*/	                
+           
 					testData();
+					
+					if(cb != null) cb( evt );
             	}
             );
         }		
+        
+        public function addLoadEventListener(callback:Function):void
+        {
+        	cb = callback;
+        }
+        
+        public function removeLoadEventListener():void
+        {
+        	cb = null;
+        }
 
 /* Temporary test visualization function - TO BE DELETED */
 
