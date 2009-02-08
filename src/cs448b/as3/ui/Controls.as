@@ -4,22 +4,16 @@ package cs448b.as3.ui
 	import fl.events.SliderEvent;
 	
 	import flare.display.TextSprite;
-	
-	import flash.display.Sprite;
-	import flash.text.TextFormat;
-
-//	import flare.vis.operator.filter.VisibilityFilter;
-//	import flash.filters.DropShadowFilter;
-	import flare.vis.events.SelectionEvent;
-//	import flare.vis.events.TooltipEvent;
-	import flare.vis.legend.Legend;
-	import flare.vis.legend.LegendItem;
 	import flare.util.Orientation;
 	import flare.vis.controls.ClickControl;
 	import flare.vis.controls.HoverControl;
-
+	import flare.vis.events.SelectionEvent;
+	import flare.vis.legend.Legend;
+	import flare.vis.legend.LegendItem;
 	
+	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.text.TextFormat;
 
 	
 	public class Controls extends Sprite
@@ -64,14 +58,83 @@ package cs448b.as3.ui
 			_team.textField.selectable = false;
 			this.addChild(_team);				
 		}
-		private function addPlayer():void
+		
+		import fl.controls.TileList;
+		import fl.controls.ScrollPolicy;
+		import fl.data.DataProvider;
+		
+		public var playerNo:Function;
+		private var _playerArray:Array = null;
+    	private var _playerSelect:TileList;
+    	
+    	private function addPlayer():void
 		{
+			var i:uint;
+			var totalRows:uint = 27;
+			var dp:DataProvider = new DataProvider();
+			dp.addItem({number:"A", firstname:"B", lastname:"C"});
+			dp.addItem({Number:"hi", FirstName:getFirstName(1), LastName:getLastName(1)});
+			dp.addItem({Number:3, FirstName:getFirstName(3), LastName:getLastName(3)});
+			dp.addItem({Number:4, FirstName:getFirstName(4), LastName:getLastName(4)});
+			dp.addItem({Number:5, FirstName:getFirstName(5), LastName:getLastName(5)});
+			dp.addItem({Number:6, FirstName:getFirstName(6), LastName:getLastName(6)});
+			dp.addItem({Number:7, FirstName:getFirstName(7), LastName:getLastName(7)});
+			dp.addItem({Number:8, FirstName:getFirstName(8), LastName:getLastName(8)});
+			dp.addItem({Number:9, FirstName:getFirstName(9), LastName:getLastName(9)});
+			dp.addItem({Number:10, FirstName:getFirstName(10), LastName:getLastName(10)});
+			dp.addItem({Number:11, FirstName:getFirstName(11), LastName:getLastName(11)});
+			dp.addItem({Number:12, FirstName:getFirstName(12), LastName:getLastName(12)});
+			dp.addItem({Number:13, FirstName:getFirstName(13), LastName:getLastName(13)});
+			dp.addItem({Number:15, FirstName:getFirstName(15), LastName:getLastName(15)});
+			dp.addItem({Number:16, FirstName:getFirstName(16), LastName:getLastName(16)});
+			dp.addItem({Number:17, FirstName:getFirstName(17), LastName:getLastName(17)});
+			dp.addItem({Number:18, FirstName:getFirstName(18), LastName:getLastName(18)});
+			dp.addItem({Number:19, FirstName:getFirstName(19), LastName:getLastName(19)});
+			dp.addItem({Number:21, FirstName:getFirstName(21), LastName:getLastName(21)});
+			dp.addItem({Number:22, FirstName:getFirstName(22), LastName:getLastName(22)});
+			dp.addItem({Number:24, FirstName:getFirstName(24), LastName:getLastName(24)});
+			dp.addItem({Number:25, FirstName:getFirstName(25), LastName:getLastName(25)});
+			dp.addItem({Number:27, FirstName:getFirstName(27), LastName:getLastName(27)});
+			dp.addItem({Number:29, FirstName:getFirstName(29), LastName:getLastName(29)});
+			dp.addItem({Number:31, FirstName:getFirstName(31), LastName:getLastName(31)});
+			dp.addItem({Number:32, FirstName:getFirstName(32), LastName:getLastName(32)});
+			dp.addItem({Number:33, FirstName:getFirstName(33), LastName:getLastName(33)});
+			dp.addItem({Number:38, FirstName:getFirstName(38), LastName:getLastName(38)});			
+			_playerSelect = new TileList();	
+			_playerSelect.dataProvider = dp;
+			_playerSelect.allowMultipleSelection = true;
+			_playerSelect.scrollPolicy = ScrollPolicy.OFF;
+			_playerSelect.columnWidth = 50;
+			_playerSelect.rowHeight = 20;
+			//_playerSelect.columnCount = 3;
+			//_playerSelect.rowCount = totalRows;
+			_playerSelect.move(800, 10);
+
+			_playerSelect.addEventListener(Event.CHANGE, playerHandler);
+			
+			this.addChild(_playerSelect);
 		}
-
-
+        private function getFirstName(no:Number):String
+        {
+        	return "Juho";
+        }
+        private function getLastName(no:Number):String
+        {
+        	return "Kim";
+        }        
+        private function playerHandler( event:Event ):void
+        {
+			playerNo(_playerArray);
+        }
+        
+    	import fl.controls.ComboBox;
+		import fl.events.ComponentEvent;
+		
 		private var _gameType:Legend;
 		private var _gameFilter:String = "All";
 		public var gameType:Function;
+		public var roundNo:Function;
+    	private var _roundSelect:ComboBox;
 		
 		private function addGame():void
 		{
@@ -107,8 +170,26 @@ package cs448b.as3.ui
 				gameType(LegendItem(e.object).text);
 			}).attach(_gameType);
 			
+			
+            //var dp:DataProvider = new DataProvider();
+            var totalEntries:uint = 38;
+            var i:uint;
+     
+			_roundSelect = new ComboBox();
+			_roundSelect.prompt = "Select a round:";
+            for(i=1; i<=totalEntries; i++) {
+                _roundSelect.addItem({label:"Round " + i});           
+            }			
+			_roundSelect.move(650, 130);
+			_roundSelect.addEventListener(Event.CHANGE, roundHandler);
+			this.addChild(_roundSelect);				
 		}
-
+		
+        private function roundHandler( event:Event ):void
+        {
+			roundNo(_roundSelect.selectedIndex+1);
+        }
+        
 		/** Callback for filter events. */
 		private function onFilter(evt:Event=null):void
 		{
@@ -126,10 +207,13 @@ package cs448b.as3.ui
 		private var _shotSlider:Slider;
 		private var _shotTitleText:TextSprite;
 		private var _shotText:TextSprite;
-
+		
+		public var shotType:Function;
+		
 		private function addShotType():void
 		{
 			_shotSlider = new Slider();
+            _shotSlider.value = 2;			
             _shotSlider.addEventListener( SliderEvent.CHANGE, showShotTypeValue );
             this.addChild( _shotSlider );
 
@@ -166,6 +250,7 @@ package cs448b.as3.ui
 		private var _timeSlider:Slider;
 		private var _timeTitleText:TextSprite;
 		private var _timeText:TextSprite;
+//		private var _roundSelect:ComboBox;
 		
 		private function addTime():void
 		{
@@ -183,11 +268,10 @@ package cs448b.as3.ui
             this.addChild( _timeText );				
 		}	
 		
+		
         private function showShotTypeValue( sliderEvent:SliderEvent ):void
         {
-        	// Filtering task to come here...
-        	
-            //_shotText.htmlText = "Slider = " + sliderEvent.value.toString();
+			shotType(sliderEvent.value);
         }
         private function showSpeedValue( sliderEvent:SliderEvent ):void
         {
@@ -212,9 +296,12 @@ package cs448b.as3.ui
 			var y:Number = 100;
 			if (_gameType) {
 	            _gameType.x = x;
-	            _gameType.y = y+30;
+	            _gameType.y = y;
 			}	
-			
+			if (_roundSelect) {
+				_roundSelect.move(x+100, y+30);
+					
+			}
 			y = 200;	
 			if (_shotSlider) {
 				_shotSlider.x = x;
