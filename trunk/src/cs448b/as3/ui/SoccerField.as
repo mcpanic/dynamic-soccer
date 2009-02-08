@@ -2,9 +2,11 @@ package cs448b.as3.ui
 {
 	import flare.scale.ScaleType;
 	import flare.util.palette.ColorPalette;
+	import flare.util.palette.SizePalette;
 	import flare.vis.Visualization;
 	import flare.vis.data.Data;
 	import flare.vis.operator.encoder.ColorEncoder;
+	import flare.vis.operator.encoder.SizeEncoder;
 	import flare.vis.operator.layout.AxisLayout;
 	
 	import flash.display.Sprite;
@@ -124,13 +126,15 @@ package cs448b.as3.ui
 		 */
 		public function drawPoints(d:Data):void
 		{
-            vis.data = d;
+			vis.data = d;
 
-            vis.operators.add(new AxisLayout("data.X", "data.Y"));
-            vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
+			vis.operators.add(new AxisLayout("data.X", "data.Y"));
+			vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
                 "lineColor", ScaleType.CATEGORIES, 
-                new ColorPalette([0x00000000, 0xffaec7e8, 0xffd62728])));
-            vis.data.nodes.setProperties({fillColor:0, lineWidth:2});
+                new ColorPalette([0xafaec7e8, 0xffd62728])));
+			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
+
+            vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
 			
             vis.update();
 		}
