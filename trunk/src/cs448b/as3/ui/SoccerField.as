@@ -1,5 +1,6 @@
 package cs448b.as3.ui
 {
+	import flare.animate.Transitioner;
 	import flare.scale.ScaleType;
 	import flare.vis.Visualization;
 	import flare.vis.data.Data;
@@ -36,7 +37,7 @@ package cs448b.as3.ui
 		public function initComponents():void
 		{
 			drawLines();
-//			initVis();
+			initVis();
 		}
 		
 		/**
@@ -44,16 +45,16 @@ package cs448b.as3.ui
 		 */
 		public function buildSprite():void
 		{
-//			addChild(vis);
+			addChild(vis);
 		}
 		
-//		public function initVis():void
-//		{
-//			vis = new Visualization();
-//			vis.bounds = new Rectangle(0, 0, fieldWidth, fieldHeight);
-//            vis.x = offset;
-//            vis.y = offset;
-//		}
+		public function initVis():void
+		{
+			vis = new Visualization();
+			vis.bounds = new Rectangle(0, 0, fieldWidth, fieldHeight);
+            vis.x = offset;
+            vis.y = offset;
+		}
 		
 		/**
 		 * Draw the lines
@@ -123,11 +124,7 @@ package cs448b.as3.ui
 		 */
 		public function drawPoints(d:Data):void
 		{
-			vis = new Visualization(d);
-			vis.bounds = new Rectangle(0, 0, fieldWidth, fieldHeight);
-            vis.x = offset;
-            vis.y = offset;
-            addChild(vis);
+            vis.data = d;
 
             vis.operators.add(new AxisLayout("data.X", "data.Y"));
             vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
