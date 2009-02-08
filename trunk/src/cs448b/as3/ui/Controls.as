@@ -8,6 +8,19 @@ package cs448b.as3.ui
 	import flash.display.Sprite;
 	import flash.text.TextFormat;
 
+//	import flare.vis.operator.filter.VisibilityFilter;
+//	import flash.filters.DropShadowFilter;
+	import flare.vis.events.SelectionEvent;
+//	import flare.vis.events.TooltipEvent;
+	import flare.vis.legend.Legend;
+	import flare.vis.legend.LegendItem;
+	import flare.util.Orientation;
+	import flare.vis.controls.ClickControl;
+	import flare.vis.controls.HoverControl;
+
+	
+	import flash.events.Event;
+
 	
 	public class Controls extends Sprite
 	{
@@ -54,9 +67,61 @@ package cs448b.as3.ui
 		private function addPlayer():void
 		{
 		}
+
+
+		private var _gameType:Legend;
+		private var _gameFilter:String = "All";
+		public var gameType:Function;
+		
 		private function addGame():void
 		{
+			// create gender filter
+			_gameType = Legend.fromValues(null, [
+				{label:"All",    color:0xff888888},
+				{label:"Home",   color:0xff8888ff},
+				{label:"Away", color:0xff88ff88},
+				{label:"Single", color:0xffff8888}
+			]);
+			_gameType.orientation = Orientation.LEFT_TO_RIGHT;
+			_gameType.labelTextFormat = _sectionFormat;
+			_gameType.margin = 3;
+			_gameType.setItemProperties({buttonMode:true, alpha:0.3});
+			_gameType.items.getChildAt(0).alpha = 1;
+			_gameType.update();
+			addChild(_gameType);
+			
+			// change alpha value on legend mouse-over
+			new HoverControl(LegendItem, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:LegendItem = LegendItem(e.object);
+					if (li.text != _gameFilter) li.alpha = 0.3;
+				}
+			).attach(_gameType);
+			
+			// filter by gender on legend click
+			new ClickControl(LegendItem, 1, function(e:SelectionEvent):void {
+				_gameType.setItemProperties({alpha:0.3});
+				e.object.alpha = 1;
+				//_gameFilter = LegendItem(e.object).text;
+				gameType(LegendItem(e.object).text);
+			}).attach(_gameType);
+			
 		}
+
+		/** Callback for filter events. */
+		private function onFilter(evt:Event=null):void
+		{
+//			_query = _search.query.toLowerCase().split(/\|/);
+//			if (_query.length==1 && _query[0].length==0) _query.pop();
+//			
+//			if (_t && _t.running) _t.stop();
+//			_t = _vis.update(_dur);
+//			_t.play();
+//			
+//			_exact = false; // reset exact match after each search
+		}
+
 
 		private var _shotSlider:Slider;
 		private var _shotTitleText:TextSprite;
@@ -144,7 +209,13 @@ package cs448b.as3.ui
 				_team.y = 10; //_bounds.top - _title.height - 45;
 			}	
 			var x:Number = 550;
-			var y:Number = 200;
+			var y:Number = 100;
+			if (_gameType) {
+	            _gameType.x = x;
+	            _gameType.y = y+30;
+			}	
+			
+			y = 200;	
 			if (_shotSlider) {
 				_shotSlider.x = x;
 				_shotSlider.y = y;
@@ -161,7 +232,7 @@ package cs448b.as3.ui
 	            _shotText.x = x+100;
 	            _shotText.y = y+30;
 			}
-			
+	
 			y = 300;
 			if (_speedSlider) {
 				_speedSlider.x = x;
