@@ -15,6 +15,7 @@ package {
 		private var soccerField:SoccerField;
 		private var dataLoader:DataLoader;
 		private var controls:Controls; 
+		
 		/**
 		 * Constructor
 		 */
