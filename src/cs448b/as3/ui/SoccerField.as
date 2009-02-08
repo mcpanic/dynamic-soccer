@@ -1,13 +1,14 @@
 package cs448b.as3.ui
 {
-	import flare.scale.Scale;
 	import flare.scale.ScaleType;
 	import flare.util.palette.ColorPalette;
 	import flare.util.palette.SizePalette;
 	import flare.vis.Visualization;
 	import flare.vis.data.Data;
+	import flare.vis.data.DataSprite;
 	import flare.vis.operator.encoder.ColorEncoder;
 	import flare.vis.operator.encoder.SizeEncoder;
+	import flare.vis.operator.filter.VisibilityFilter;
 	import flare.vis.operator.layout.AxisLayout;
 	
 	import flash.display.Sprite;
@@ -20,6 +21,9 @@ package cs448b.as3.ui
 		private var offset:Number = 5;
 		
 		private var vis:Visualization = null;
+		
+		private var _gameType:String = "All";
+		private var _roundNo:Number = 1;
 		
 		/**
 		 * Constructor
@@ -149,6 +153,28 @@ package cs448b.as3.ui
 			vis.xyAxes.yAxis.axisScale.flush = true;
 			
             vis.update();
+            
+            vis.operators.add( new VisibilityFilter(gameFilter) );
+            
+		}
+		
+		private function gameFilter(d:DataSprite):Boolean
+		{
+			if(_gameType == "All") return true;
+			else if(_gameType == "Home" && d.data.HomeAway == "Home") return true;
+			else if(_gameType == "Away" && d.data.HomeAway == "Away") return true;
+			else if(_gameType == "Single" && d.data.Round == _roundNo) return true;
+			else return false;
+		}
+		
+		public function set gameType(gt:String):void
+		{
+			_gameType = gt; 
+		}
+		
+		public function set roundNo(rn:Number):void
+		{
+			_roundNo = rn;
 		}
 	}
 }

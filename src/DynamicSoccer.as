@@ -47,6 +47,8 @@ package {
 		{
 			soccerField = new SoccerField();
 			controls = new Controls();
+			
+			// register callbacks
 		}
 		
 		/**
