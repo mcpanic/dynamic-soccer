@@ -25,6 +25,8 @@ package cs448b.as3.ui
 		private var _titleFormat:TextFormat;
 		private var _sectionFormat:TextFormat;
 		private var _textFormat:TextFormat;
+		
+		private var _controlListener:Array = new Array(2);
 
 		private var totalPlayers:Number = 27;
 		
@@ -69,13 +71,17 @@ package cs448b.as3.ui
 		import fl.controls.CheckBox;
         import flash.events.MouseEvent;
 		
-		public var playerNo:Function;
+//		public var playerNo:Function;
 		private var _playerArray:Array;
     	private var _playerSelect:Legend;
         private var _playerBox:Array;
         private var _playerFilter:String = "All";
         //private var cb1:CheckBox,cb2:CheckBox,cb3:CheckBox,cb4:CheckBox,cb5:CheckBox,cb6:CheckBox,cb7:CheckBox,cb8:CheckBox,cb9:CheckBox,cb10:CheckBox,cb11:CheckBox,cb12:CheckBox,cb13:CheckBox,cb14:CheckBox,cb15:CheckBox,cb16:CheckBox,cb17:CheckBox,cb18:CheckBox,cb19:CheckBox,cb20:CheckBox,cb21:CheckBox,cb22:CheckBox,cb23:CheckBox,cb24:CheckBox,cb25:CheckBox,cb26:CheckBox,cb27:CheckBox;
   	
+  		public function addControlListener(cl:ControlListener):void
+  		{
+  			_controlListener.push(cl);
+  		}
 
     	private function addPlayer():void
 		{
@@ -136,7 +142,7 @@ package cs448b.as3.ui
 					for (i=0; i<totalPlayers; i++)
 						_playerBox[i].selected = false;
 				}
-				playerNo(_playerArray);
+				firePlayerChanged(_playerArray); //playerNo(_playerArray);
 			}).attach(_playerSelect);
 
 		}
@@ -169,7 +175,7 @@ package cs448b.as3.ui
 			else
 	        	_playerArray.push(no);
 			//trace(_playerArray.length);
-			playerNo(_playerArray);
+			firePlayerChanged(_playerArray); //playerNo(_playerArray);
         }
         
     	import fl.controls.ComboBox;
@@ -177,8 +183,8 @@ package cs448b.as3.ui
 		
 		private var _gameType:Legend;
 		private var _gameFilter:String = "All";
-		public var gameType:Function;
-		public var roundNo:Function;
+//		public var gameType:Function;
+//		public var roundNo:Function;
     	private var _roundSelect:ComboBox;
 		
 		private function addGame():void
@@ -212,7 +218,7 @@ package cs448b.as3.ui
 				_gameType.setItemProperties({alpha:0.3});
 				e.object.alpha = 1;
 				_gameFilter = LegendItem(e.object).text;
-				gameType(LegendItem(e.object).text);
+				fireGameTypeChanged(LegendItem(e.object).text); //gameType(LegendItem(e.object).text);
 				if (_gameFilter == "Single")
 					_roundSelect.enabled = true;
 				else
@@ -237,7 +243,7 @@ package cs448b.as3.ui
 		
         private function roundHandler( event:Event ):void
         {
-			roundNo(_roundSelect.selectedIndex+1);
+			fireRoundNo(_roundSelect.selectedIndex+1);//roundNo(_roundSelect.selectedIndex+1);
         }
 
 //		private var _shotSlider:Slider;
@@ -245,7 +251,7 @@ package cs448b.as3.ui
 //		private var _shotText:TextSprite;
 		private var _shotType:Legend;
 		private var _shotFilter:String = "Shots";
-		public var shotType:Function;
+//		public var shotType:Function;
 		
 		private function addShotType():void
 		{
@@ -293,11 +299,11 @@ package cs448b.as3.ui
 				_shotFilter = LegendItem(e.object).text;
 				
 				if (_shotFilter == "Goals")
-					shotType(0);
+					fireShotTypeChanged(0);//shotType(0);
 				else if (_shotFilter == "Shots on Goal")
-					shotType(1);
+					fireShotTypeChanged(1);//shotType(1);
 				else 
-					shotType(2);
+					fireShotTypeChanged(2);//shotType(2);
 			}).attach(_shotType);
 			            	
 		}
@@ -341,7 +347,7 @@ package cs448b.as3.ui
 		private var _timeText:TextSprite;
 		private var _timeCurrent:TextField;
 		private var _timeCurrentMin:TextSprite;
-		public var timeCurrent:Function;
+//		public var timeCurrent:Function;
 		
 		private function addTime():void
 		{
@@ -377,7 +383,7 @@ package cs448b.as3.ui
         private function showTimeValue( sliderEvent:SliderEvent ):void
         {
             _timeCurrent.text = sliderEvent.value.toString();
-            timeCurrent(sliderEvent.value);
+            fireTimechanged(sliderEvent.value);//timeCurrent(sliderEvent.value);
         }    
             
 		import fl.controls.Button;		
@@ -418,7 +424,7 @@ package cs448b.as3.ui
    			}
    			_timeSlider.value += 1;
             _timeCurrent.text = _timeSlider.value.toString();
-            timeCurrent(_timeSlider.value);		
+            fireTimechanged(_timeSlider.value);//timeCurrent(_timeSlider.value);		
 		}
         		
 		public function layout():void
@@ -523,8 +529,51 @@ package cs448b.as3.ui
 					_playerBox[i].y = i*20+30;				
 				}
 			}			
-		}		
-	}
+		}
 	
-
+		private function firePlayerChanged(pa:Array):void
+		{
+			for(var o:Object in _controlListener)
+			{
+				var cl:ControlListener = _controlListener[o] as ControlListener;
+				cl.playerNo(pa);
+			}
+		}
+		
+		private function fireGameTypeChanged(gt:String):void
+		{
+			for(var o:Object in _controlListener)
+			{
+				var cl:ControlListener = _controlListener[o] as ControlListener;
+				cl.gameType(gt);
+			}
+		}
+		
+		private function fireShotTypeChanged(st:Number):void
+		{
+			for(var o:Object in _controlListener)
+			{
+				var cl:ControlListener = _controlListener[o] as ControlListener;
+				cl.shotType(st);
+			}
+		}
+		
+		private function fireTimechanged(tc:Number):void
+		{
+			for(var o:Object in _controlListener)
+			{
+				var cl:ControlListener = _controlListener[o] as ControlListener;
+				cl.timeCurrent(tc);
+			}
+		}	
+		
+		private function fireRoundNo(rn:Number):void
+		{
+			for(var o:Object in _controlListener)
+			{
+				var cl:ControlListener = _controlListener[o] as ControlListener;
+				cl.roundNo(rn);
+			}	
+		}	
+	}
 }
