@@ -50,11 +50,15 @@ package {
 			controls = new Controls();
 			
 			// register callbacks
-			controls.gameType = soccerField.gameType;
-			controls.shotType = soccerField.shotType;
-			controls.roundNo = soccerField.roundNo;
-			controls.playerNo = soccerField.playerNo;
-			controls.timeCurrent = soccerField.timeCurrent;
+//			controls.gameType = soccerField.gameType;
+//			controls.shotType = soccerField.shotType;
+//			controls.roundNo = soccerField.roundNo;
+//			controls.playerNo = soccerField.playerNo;
+//			controls.timeCurrent = soccerField.timeCurrent;
+//			
+//			controls.shotType = barChart.shotType;
+			controls.addControlListener(soccerField);
+			controls.addControlListener(barChart);
 		}
 		
 		/**
