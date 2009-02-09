@@ -137,7 +137,7 @@ package cs448b.as3.ui
 		/**
 		 * Draws the given points
 		 */
-		public function drawPoints(d:Data):void
+		public function registerData(d:Data):void
 		{
 			vis.data = d;
 
@@ -154,11 +154,13 @@ package cs448b.as3.ui
 			vis.xyAxes.xAxis.axisScale.max = fieldWidth;
 			vis.xyAxes.xAxis.axisScale.min = 0;
 			vis.xyAxes.xAxis.axisScale.flush = true;
+			vis.xyAxes.xAxis.showLabels = false;
 			
 			vis.xyAxes.yAxis.showLines = false;
 			vis.xyAxes.yAxis.axisScale.max = fieldHeight;
 			vis.xyAxes.yAxis.axisScale.min = 0;
 			vis.xyAxes.yAxis.axisScale.flush = true;
+			vis.xyAxes.yAxis.showLabels = false;
 
 			// add filters
 			vis.operators.add(new VisibilityFilter(theFilter));
