@@ -581,7 +581,7 @@ package cs448b.as3.ui
 			for(var o:Object in _controlListener)
 			{
 				var cl:ControlListener = _controlListener[o] as ControlListener;
-				cl.immediate = b;
+				cl.setImmediate(b);
 			}
 		}
 	}

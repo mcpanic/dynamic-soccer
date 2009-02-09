@@ -12,7 +12,6 @@ package cs448b.as3.ui
 		
 		function timeCurrent(tc:Number):void;
 		
-		function get immediate():Boolean;
-		function set immediate(b:Boolean):void;
+		function setImmediate(b:Boolean):void;
 	}
 }
