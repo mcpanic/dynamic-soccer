@@ -28,10 +28,9 @@ package cs448b.as3.ui
 		// filter values
 		private var _gameType:String = "All";
 		private var _roundNo:Number = 1;
-		
 		private var _playerArray:Array = null;
-		
 		private var _shotType:Number = 2;
+		private var _timeCurrent:Number = 90;
 		
 		/**
 		 * Constructor
@@ -142,9 +141,9 @@ package cs448b.as3.ui
 			vis.data = d;
 
 			vis.operators.add(new AxisLayout("data.X", "data.Y"));
-			vis.operators.add(new ColorEncoder("data.Goal", Data.NODES,
+			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
                 "lineColor", ScaleType.CATEGORIES, 
-                new ColorPalette([0xafaec7e8, 0xffd62728])));
+                new ColorPalette([0xffd62728, 0xffaec7e8, 0xafffffff])));
 			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
 			
             vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
@@ -172,7 +171,7 @@ package cs448b.as3.ui
 // Visability filter functions
 		private function theFilter(d:DataSprite):Boolean
 		{
-			return gameFilter(d) && playerFilter(d) && goalFilter(d);
+			return gameFilter(d) && playerFilter(d) && goalFilter(d) && timeFilter(d);
 		}
 		
 		private function gameFilter(d:DataSprite):Boolean
@@ -201,39 +200,48 @@ package cs448b.as3.ui
 		
 		private function goalFilter(d:DataSprite):Boolean
 		{
-			if(_shotType == 0 && d.data.Goal == "y") return true;
-			else if(_shotType == 1 && (d.data.Goal == "y" || d.data.ShotOnGoal == "y")) return true;
+			if(_shotType == 0 && d.data.ShotType == "g") return true;
+			else if(_shotType == 1 && (d.data.ShotType == "o" || d.data.ShotType == "g")) return true;
 			else if(_shotType == 2) return true;
 			else return false;
 		}
 
+		private function timeFilter(d:DataSprite):Boolean
+		{
+			if(_timeCurrent == 90) return true;
+			else if(_timeCurrent >= d.data.Time) return true;
+			else return false;
+		}
+		
 // Visability value set functions
 		public function gameType(gt:String):void
 		{
 			_gameType = gt; 		
 			vis.update(new Transitioner(transTime)).play();
-
 		}
 		
 		public function roundNo(rn:Number):void
 		{
-			_roundNo = rn;
-			
+			_roundNo = rn;			
 			vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function playerNo(pnArray:Array):void
 		{
-			_playerArray = pnArray;
-			
+			_playerArray = pnArray;			
 			vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function shotType(gt:Number):void
 		{
-			_shotType = gt;
-			
+			_shotType = gt;			
 			vis.update(new Transitioner(transTime)).play();
+		}
+		
+		public function timeCurrent(tc:Number):void
+		{
+			_timeCurrent = tc;
+			vis.update(new Transitioner(transTime)).play();			
 		}
 	}
 
