@@ -41,6 +41,7 @@ package cs448b.as3.ui
 			addShotType();
 			addPlaybackSpeed();
 			addTime();
+			addPlay();
 			layout();
 		}
 		
@@ -239,41 +240,83 @@ package cs448b.as3.ui
 			roundNo(_roundSelect.selectedIndex+1);
         }
 
-		private var _shotSlider:Slider;
+//		private var _shotSlider:Slider;
 		private var _shotTitleText:TextSprite;
-		private var _shotText:TextSprite;
-		
+//		private var _shotText:TextSprite;
+		private var _shotType:Legend;
+		private var _shotFilter:String = "Shots";
 		public var shotType:Function;
 		
 		private function addShotType():void
 		{
-			_shotSlider = new Slider();
-            _shotSlider.value = 2;			
-            _shotSlider.addEventListener( SliderEvent.CHANGE, showShotTypeValue );
-            this.addChild( _shotSlider );
+//			_shotSlider = new Slider();
+//            _shotSlider.value = 2;			
+//            _shotSlider.addEventListener( SliderEvent.CHANGE, showShotTypeValue );
+//            this.addChild( _shotSlider );
 
             _shotTitleText = new TextSprite("", _sectionFormat);
             _shotTitleText.text = "Shot Type";
             this.addChild( _shotTitleText );
             
-            _shotText = new TextSprite("", _textFormat);
-            _shotText.horizontalAnchor = TextSprite.CENTER;
-            _shotText.text = "Goals           Shots on Goal           Shots";
-            this.addChild( _shotText );			
+//            _shotText = new TextSprite("", _textFormat);
+//            _shotText.horizontalAnchor = TextSprite.CENTER;
+//            _shotText.text = "Goals           Shots on Goal           Shots";
+//            this.addChild( _shotText );		
+            
+			// create filter
+			_shotType = Legend.fromValues(null, [
+				{label:"Goals",    color:0xff888888},
+				{label:"Shots on Goal",   color:0xff8888ff},
+				{label:"Shots", color:0xff88ff88}
+			]);
+			_shotType.orientation = Orientation.LEFT_TO_RIGHT;
+			_shotType.labelTextFormat = _sectionFormat;
+			_shotType.margin = 3;
+			_shotType.setItemProperties({buttonMode:true, alpha:0.3});
+			_shotType.items.getChildAt(2).alpha = 1;
+			_shotType.update();
+			addChild(_shotType);
+			
+			// change alpha value on legend mouse-over
+			new HoverControl(LegendItem, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:LegendItem = LegendItem(e.object);
+					if (li.text != _shotFilter) li.alpha = 0.3;
+				}
+			).attach(_shotType);
+			
+			// filter by game type on legend click
+			new ClickControl(LegendItem, 1, function(e:SelectionEvent):void {
+				_shotType.setItemProperties({alpha:0.3});
+				e.object.alpha = 1;
+				_shotFilter = LegendItem(e.object).text;
+				
+				if (_shotFilter == "Goals")
+					shotType(0);
+				else if (_shotFilter == "Shots on Goal")
+					shotType(1);
+				else 
+					shotType(2);
+			}).attach(_shotType);
+			            	
 		}
-        private function showShotTypeValue( sliderEvent:SliderEvent ):void
-        {
-			shotType(sliderEvent.value);
-        }
+//        private function showShotTypeValue( sliderEvent:SliderEvent ):void
+//        {
+//			shotType(sliderEvent.value);
+//        }
         		
 		private var _speedSlider:Slider;
 		private var _speedTitleText:TextSprite;
 		private var _speedText:TextSprite;
+		
+		private var _playSpeed:Number = 200;
 				
 		private function addPlaybackSpeed():void
 		{
 			_speedSlider = new Slider();
             _speedSlider.addEventListener( SliderEvent.CHANGE, showSpeedValue );
+            _speedSlider.value = 2;
             this.addChild( _speedSlider );
 
             _speedTitleText = new TextSprite("", _sectionFormat);
@@ -288,7 +331,7 @@ package cs448b.as3.ui
 		
         private function showSpeedValue( sliderEvent:SliderEvent ):void
         {
-            //_speedText.htmlText = "Slider = " + sliderEvent.value.toString();
+        	_playSpeed = 1000 - sliderEvent.value * 200;
         }
         
 		import flash.text.TextField;
@@ -304,7 +347,9 @@ package cs448b.as3.ui
 		{
 			_timeSlider = new Slider();
             _timeSlider.addEventListener( SliderEvent.CHANGE, showTimeValue );
-            _timeSlider.value = 500;
+            _timeSlider.minimum = 0;
+			_timeSlider.maximum = 90;
+			_timeSlider.value = 90;
             this.addChild( _timeSlider );
 
             _timeTitleText = new TextSprite("", _sectionFormat);
@@ -328,16 +373,54 @@ package cs448b.as3.ui
             _timeCurrentMin.text = "min.";
             this.addChild( _timeCurrentMin );	             		
 		}	
-		
-		
-
 
         private function showTimeValue( sliderEvent:SliderEvent ):void
         {
             _timeCurrent.text = sliderEvent.value.toString();
             timeCurrent(sliderEvent.value);
-        }        
+        }    
+            
+		import fl.controls.Button;		
+		private var _playButton:Button;		
+		public function addPlay():void
+		{
+			_playButton = new Button();
+			_playButton.label = "Play";
+			_playButton.toggle = true;
+			_playButton.addEventListener(MouseEvent.CLICK, buttonClick);
+			addChild(_playButton);
+		}
 		
+		import flash.utils.*;
+		private var curInterval:uint;
+	
+		private function buttonClick( buttonEvent:MouseEvent ):void
+        {
+			clearInterval(curInterval);        	
+        	if (_playButton.label == "Play")
+	        {
+	        	_playButton.label = "Stop";
+	        	curInterval = setInterval(playMovie, _playSpeed);	        	
+	        }
+	        else
+	        {
+	        	_playButton.label = "Play";
+	        }	
+        }    
+
+		private function playMovie():void
+		{
+			if (_timeSlider.value == 90)
+			{
+				_playButton.label = "Play";
+				clearInterval(curInterval);
+				return;
+   			}
+   			_timeSlider.value += 1;
+            _timeCurrent.text = _timeSlider.value.toString();
+            timeCurrent(_timeSlider.value);		
+		}
+        		
 		public function layout():void
 		{
 			if (_season) {
@@ -359,22 +442,26 @@ package cs448b.as3.ui
 					
 			}
 			y = 200;	
-			if (_shotSlider) {
-				_shotSlider.x = x;
-				_shotSlider.y = y;
-				_shotSlider.setSize(200, 30);
-				// 0: Goals, 1: Shots on goals, 2: Shots
-				_shotSlider.minimum = 0;
-				_shotSlider.maximum = 2;
-			}
+//			if (_shotSlider) {
+//				_shotSlider.x = x;
+//				_shotSlider.y = y;
+//				_shotSlider.setSize(200, 30);
+//				// 0: Goals, 1: Shots on goals, 2: Shots
+//				_shotSlider.minimum = 0;
+//				_shotSlider.maximum = 2;
+//			}
+			if (_shotType) {
+	            _shotType.x = x;
+	            _shotType.y = y;
+			}	
 			if (_shotTitleText) {
 	            _shotTitleText.x = x;
 	            _shotTitleText.y = y-30;
 			}			
-			if (_shotText) {
-	            _shotText.x = x+100;
-	            _shotText.y = y+30;
-			}
+//			if (_shotText) {
+//	            _shotText.x = x+100;
+//	            _shotText.y = y+30;
+//			}
 	
 			y = 300;
 			if (_speedSlider) {
@@ -400,9 +487,6 @@ package cs448b.as3.ui
 				_timeSlider.x = x;
 				_timeSlider.y = y;
 				_timeSlider.setSize(500, 30);
-				// 0: Slowest, 1: Slow, 2: Normal, 3: Fast, 4: Fastest
-				_timeSlider.minimum = 0;
-				_timeSlider.maximum = 90;
 			}
 			if (_timeTitleText) {
 	            _timeTitleText.x = x;
@@ -422,6 +506,10 @@ package cs448b.as3.ui
 	            _timeCurrentMin.y = y+30;				
 			}
 			
+			if (_playButton) {
+	            _playButton.x = x+530;		
+	            _playButton.y = y-10;		
+			}
 			x = 800;
 			y = 600;	
 			if (_playerSelect) {
