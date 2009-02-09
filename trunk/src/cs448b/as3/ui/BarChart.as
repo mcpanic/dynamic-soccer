@@ -159,12 +159,7 @@ package cs448b.as3.ui
 			vis.update(new Transitioner(transTime)).play();			
 		}
 		
-		public function get immediate():Boolean
-		{
-			return vis.operators[3].immediate;
-		}
-		
-		public function set immediate(im:Boolean):void
+		public function setImmediate(im:Boolean):void
 		{
 			vis.operators[3].immediate = im; // filter immediately!
 		}
