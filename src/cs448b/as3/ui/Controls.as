@@ -62,6 +62,7 @@ package cs448b.as3.ui
 		import fl.controls.TileList;
 		import fl.controls.ScrollPolicy;
 		import fl.data.DataProvider;
+		import fl.events.ListEvent;
 		
 		public var playerNo:Function;
 		private var _playerArray:Array = null;
@@ -72,8 +73,9 @@ package cs448b.as3.ui
 			var i:uint;
 			var totalRows:uint = 27;
 			var dp:DataProvider = new DataProvider();
-			dp.addItem({number:"A", firstname:"B", lastname:"C"});
-			dp.addItem({Number:"hi", FirstName:getFirstName(1), LastName:getLastName(1)});
+			_playerArray = new Array();
+			
+			dp.addItem({Number:"1", FirstName:getFirstName(1), LastName:getLastName(1)});
 			dp.addItem({Number:3, FirstName:getFirstName(3), LastName:getLastName(3)});
 			dp.addItem({Number:4, FirstName:getFirstName(4), LastName:getLastName(4)});
 			dp.addItem({Number:5, FirstName:getFirstName(5), LastName:getLastName(5)});
@@ -104,14 +106,15 @@ package cs448b.as3.ui
 			_playerSelect.dataProvider = dp;
 			_playerSelect.allowMultipleSelection = true;
 			_playerSelect.scrollPolicy = ScrollPolicy.OFF;
+			_playerSelect.labelField = "Number";
 			_playerSelect.columnWidth = 50;
 			_playerSelect.rowHeight = 20;
-			//_playerSelect.columnCount = 3;
-			//_playerSelect.rowCount = totalRows;
+			_playerSelect.columnCount = 3;
+			_playerSelect.rowCount = totalRows;
 			_playerSelect.move(800, 10);
 
-			_playerSelect.addEventListener(Event.CHANGE, playerHandler);
-			
+			//_playerSelect.addEventListener(Event.CHANGE, playerHandler);
+			_playerSelect.addEventListener(ListEvent.ITEM_CLICK, playerHandler);
 			this.addChild(_playerSelect);
 		}
         private function getFirstName(no:Number):String
@@ -121,9 +124,20 @@ package cs448b.as3.ui
         private function getLastName(no:Number):String
         {
         	return "Kim";
-        }        
-        private function playerHandler( event:Event ):void
+        }  
+      
+        private function playerHandler( event:ListEvent ):void
         {
+        	event.currentTarget.
+    		var index:Number = _playerArray.indexOf(event.item.Number);
+    		trace(index);
+    		// if this item is unselected
+			if (index != -1)
+				_playerArray.splice(index, 1);	
+			// if this item is selected
+			else
+	        	_playerArray.push(event.item.Number);
+			//trace(_playerArray.length);
 			playerNo(_playerArray);
         }
         
