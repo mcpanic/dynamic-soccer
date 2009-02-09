@@ -1,6 +1,7 @@
 package cs448b.as3.ui
 {
 	import flare.animate.Transitioner;
+	import flare.display.TextSprite;
 	import flare.scale.ScaleType;
 	import flare.util.Shapes;
 	import flare.vis.Visualization;
@@ -12,6 +13,7 @@ package cs448b.as3.ui
 	
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
+	import flash.text.TextFormat;
 	
 	public class BarChart extends Sprite implements ControlListener
 	{
@@ -21,6 +23,10 @@ package cs448b.as3.ui
 		private var transTime:Number = 0.5;
 		
 		private var vis:Visualization = null;
+		
+		private var textFormat:TextFormat;
+		private var xLabel:TextSprite;
+		private var yLabel:TextSprite;
 		
 		// filter values
 		private var _gameType:String = "All";
@@ -42,11 +48,23 @@ package cs448b.as3.ui
 		public function initComponents():void
 		{
 			initVis();
+			
+			textFormat = new TextFormat("Verdana,Tahoma,Arial",12,0,true);
+			xLabel = new TextSprite("Minutes", textFormat);
+			yLabel = new TextSprite("Shot#", textFormat);
 		}
 		
 		public function buildSprite():void
 		{
 			addChild(vis);
+			
+			xLabel.x = chartWidth/2 - 50;
+			xLabel.y = chartHeight + 30;
+			addChild(xLabel);
+			
+			yLabel.x = -yLabel.width-30;
+			yLabel.y = chartHeight/2;			
+			addChild(yLabel);
 		}
 		
 		public function initVis(d:Data = null):void
