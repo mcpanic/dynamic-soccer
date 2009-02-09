@@ -1,0 +1,39 @@
+Round	Home	Opponent	ScoreHome	ScoreAway
+1	y	Reading	0	0
+2	n	Portsmouth	1	1
+3	n	Manchester City	1	0
+4	y	Tottenham Hotspur	1	0
+5	y	Sunderland	1	0
+6	n	Everton	0	1
+7	y	Chelsea	2	0
+8	n	Birmingham	0	1
+9	y	Wigan Athletic	4	0
+10	n	Aston Villa	1	4
+11	y	Middlesbrough	4	1
+12	n	Arsenal	2	2
+13	y	Blackburn Rovers	2	0
+14	n	Bolton Wanderers	1	0
+15	y	Fulham	2	0
+16	y	Derby County	4	1
+17	n	Liverpool	0	1
+18	y	Everton	2	1
+19	n	Sunderland	0	4
+20	n	West Ham United	2	1
+21	y	Birmingham	1	0
+22	y	Newcastle United	6	0
+23	n	Reading	0	2
+24	y	Portsmouth	2	0
+25	n	Tottenham Hotspur	1	1
+26	y	Manchester City	1	2
+27	n	Newcastle United	1	5
+28	n	Fulham	0	3
+29	n	Derby County	0	1
+30	y	Bolton Wanderers	2	0
+31	y	Liverpool	3	0
+32	y	Aston Villa	4	0
+33	n	Middlesbrough	2	2
+34	y	Arsenal	2	1
+35	n	Blackburn Rovers	1	1
+36	n	Chelsea	2	1
+37	y	West Ham United	4	1
+38	n	Wigan Athletic	0	2
