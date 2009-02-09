@@ -128,7 +128,7 @@ package cs448b.as3.ui
       
         private function playerHandler( event:ListEvent ):void
         {
-        	event.currentTarget.
+
     		var index:Number = _playerArray.indexOf(event.item.Number);
     		trace(index);
     		// if this item is unselected
