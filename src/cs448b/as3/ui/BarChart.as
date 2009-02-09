@@ -179,7 +179,7 @@ package cs448b.as3.ui
 		
 		public function setImmediate(im:Boolean):void
 		{
-			vis.operators[3].immediate = im; // filter immediately!
+			vis.operators[2].immediate = im; // filter immediately!
 		}
 	}
 }

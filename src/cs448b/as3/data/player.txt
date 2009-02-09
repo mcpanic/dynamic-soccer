@@ -1,4 +1,4 @@
-Number	First Name	Last Name
+Number	FirstName	LastName
 1	Edwin	van der Sar
 29	Tomasz	Kuszczak
 12	Ben	Foster

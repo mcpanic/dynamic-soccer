@@ -21,9 +21,13 @@ package cs448b.as3.ui
 		private var _seasonText:String =	"2007/08";
 		private var _season:TextSprite;
 		private var _teamText:String =	"Manchester United";
-		private var _team:TextSprite;		
+		private var _team:TextSprite;	
+		private var _homeText:TextSprite;
+		private var _awayText:TextSprite;
+			
 		private var _titleFormat:TextFormat;
 		private var _sectionFormat:TextFormat;
+		private var _legendFormat:TextFormat;
 		private var _textFormat:TextFormat;
 		
 		private var _controlListener:Array = new Array(2);
@@ -34,10 +38,12 @@ package cs448b.as3.ui
 		{
 			_titleFormat = new TextFormat("Verdana,Tahoma,Arial",16,0,true);
 			_sectionFormat = new TextFormat("Verdana,Tahoma,Arial",12,0,true);
+			_legendFormat = new TextFormat("Verdana,Tahoma,Arial",11,0,true);
 			_textFormat = new TextFormat("Verdana,Tahoma,Arial",10,0,false);
 
 			addSeason();
 			addTeam();
+			addHomeAway();
 			addPlayer();
 			addGame();
 			addShotType();
@@ -62,12 +68,20 @@ package cs448b.as3.ui
 			_team.textField.selectable = false;
 			this.addChild(_team);				
 		}
-		
-//		import fl.controls.TileList;
-//		import fl.controls.ScrollPolicy;
-//		import fl.data.DataProvider;
-		import fl.events.ListEvent;
-		
+		private function addHomeAway():void
+		{
+			_homeText = new TextSprite("", _sectionFormat, TextSprite.DEVICE);
+			_homeText.htmlText = "Home";
+			_homeText.textField.selectable = false;
+			this.addChild(_homeText);	
+				
+			_awayText = new TextSprite("", _sectionFormat, TextSprite.DEVICE);
+			_awayText.htmlText = "Away";
+			_awayText.textField.selectable = false;
+			this.addChild(_awayText);						
+		}		
+
+		import fl.events.ListEvent;		
 		import fl.controls.CheckBox;
         import flash.events.MouseEvent;
 		
@@ -75,9 +89,8 @@ package cs448b.as3.ui
 		private var _playerArray:Array;
     	private var _playerSelect:Legend;
         private var _playerBox:Array;
+        private var _playerName:Array;
         private var _playerFilter:String = "All";
-        //private var cb1:CheckBox,cb2:CheckBox,cb3:CheckBox,cb4:CheckBox,cb5:CheckBox,cb6:CheckBox,cb7:CheckBox,cb8:CheckBox,cb9:CheckBox,cb10:CheckBox,cb11:CheckBox,cb12:CheckBox,cb13:CheckBox,cb14:CheckBox,cb15:CheckBox,cb16:CheckBox,cb17:CheckBox,cb18:CheckBox,cb19:CheckBox,cb20:CheckBox,cb21:CheckBox,cb22:CheckBox,cb23:CheckBox,cb24:CheckBox,cb25:CheckBox,cb26:CheckBox,cb27:CheckBox;
-  	
   		public function addControlListener(cl:ControlListener):void
   		{
   			_controlListener.push(cl);
@@ -88,16 +101,19 @@ package cs448b.as3.ui
 			var i:uint;
 			
 			_playerBox = new Array();
-			_playerArray = new Array();			
+			_playerArray = new Array();	
+			_playerName = new Array();		
 			for(i=0; i<totalPlayers; i++)
 			{
 				_playerBox.push(new CheckBox());
 				_playerBox[i].label = getPlayerNumber(i);
 				_playerBox[i].selected = true;
-//				_playerBox[i].x = 800;
-//				_playerBox[i].y = i*20+30;
             	_playerBox[i].addEventListener(MouseEvent.CLICK,playerHandler);
             	addChild(_playerBox[i]);
+            	
+            	_playerName.push(new TextSprite("", _textFormat, TextSprite.DEVICE));
+            	_playerName[i].htmlText = getFirstName(i) + " " + getLastName(i);
+            	this.addChild(_playerName[i]);
 			}	
 			         				
 			// create gender filter
@@ -106,9 +122,9 @@ package cs448b.as3.ui
 				{label:"None",   color:0xff8888ff}
 			]);
 			_playerSelect.orientation = Orientation.LEFT_TO_RIGHT;
-			_playerSelect.labelTextFormat = _sectionFormat;
+			_playerSelect.labelTextFormat = _legendFormat;
 			_playerSelect.margin = 3;
-			_playerSelect.setItemProperties({buttonMode:true, alpha:0.3});
+			_playerSelect.setItemProperties({buttonMode:true, alpha:0.4});
 			//_playerSelect.items.getChildAt(0).alpha = 1;
 			_playerSelect.update();
 			addChild(_playerSelect);
@@ -118,13 +134,13 @@ package cs448b.as3.ui
 				function(e:SelectionEvent):void { e.object.alpha = 1; },
 				function(e:SelectionEvent):void {
 					var li:LegendItem = LegendItem(e.object);
-					li.alpha = 0.3;
+					li.alpha = 0.4;
 				}
 			).attach(_playerSelect);
 			
 			// filter by player on legend click
 			new ClickControl(LegendItem, 1, function(e:SelectionEvent):void {
-				_playerSelect.setItemProperties({alpha:0.3});
+				_playerSelect.setItemProperties({alpha:0.4});
 				//e.object.alpha = 1;
 				//reinitialize the array to cancel all existing selections
 				_playerArray = null;
@@ -146,28 +162,68 @@ package cs448b.as3.ui
 			}).attach(_playerSelect);
 
 		}
+
+
+		import flare.vis.data.Data;	
+		import flare.vis.data.DataSprite;	
+		private var numberList:Array;
+//		var numberList:Array = new Array(1,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,21,22,24,25,27,29,31,32,33,38);
+		private var firstNameList:Array;
+		private var lastNameList:Array;
 		
+		private function getPlayerData(d:DataSprite):void
+		{
+			numberList.push(d.data.Number);
+			firstNameList.push(d.data.FirstName);
+			lastNameList.push(d.data.LastName);
+			
+			//return false;
+		}	
+		public function registerData(d:Data):void
+		{
+			numberList = new Array();
+			firstNameList = new Array();
+			lastNameList = new Array();
+			d.visit(getPlayerData);
+			updatePlayerData();
+		}
+		
+		private function updatePlayerData():void 
+		{
+			for(var i:uint=0; i<totalPlayers; i++)
+			{
+				_playerBox[i].label = getPlayerNumber(i);
+            	_playerName[i].htmlText = getFirstName(i) + " " + getLastName(i);
+            	
+			}				
+		}
 		private function getPlayerNumber(no:Number):Number
 		{
-			var noList:Array = new Array(1,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,21,22,24,25,27,29,31,32,33,38);
-			return noList[no];
-		}		
+			//return 1;
+			if(numberList != null) return numberList[no];
+			else return 1;
+		}			
         private function getFirstName(no:Number):String
         {
-        	return "Juho";
+//        	return firstNameList[no];
+        	//return "Juho";
+        	if(firstNameList != null) return firstNameList[no];
+			else return "Juho";
         }
         private function getLastName(no:Number):String
         {
-        	return "Kim";
+//        	return lastNameList[no];
+        	//return "Kim";
+        	if(lastNameList != null) return lastNameList[no];
+			else return "Kim";
         }   
         
         private function playerHandler( event:MouseEvent ):void
         {
 			
 			var no:Number = event.target.label;
-			trace (no);
     		var index:Number = _playerArray.indexOf(no);
-//    		trace(index);
+
     		// if this item is unselected
 			if (index != -1)
 				_playerArray.splice(index, 1);	
@@ -183,8 +239,7 @@ package cs448b.as3.ui
 		
 		private var _gameType:Legend;
 		private var _gameFilter:String = "All";
-//		public var gameType:Function;
-//		public var roundNo:Function;
+		private var _roundTitleText:TextSprite;
     	private var _roundSelect:ComboBox;
 		
 		private function addGame():void
@@ -197,9 +252,9 @@ package cs448b.as3.ui
 				{label:"Single", color:0xffff8888}
 			]);
 			_gameType.orientation = Orientation.LEFT_TO_RIGHT;
-			_gameType.labelTextFormat = _sectionFormat;
+			_gameType.labelTextFormat = _legendFormat;
 			_gameType.margin = 3;
-			_gameType.setItemProperties({buttonMode:true, alpha:0.3});
+			_gameType.setItemProperties({buttonMode:true, alpha:0.4});
 			_gameType.items.getChildAt(0).alpha = 1;
 			_gameType.update();
 			addChild(_gameType);
@@ -209,13 +264,13 @@ package cs448b.as3.ui
 				function(e:SelectionEvent):void { e.object.alpha = 1; },
 				function(e:SelectionEvent):void {
 					var li:LegendItem = LegendItem(e.object);
-					if (li.text != _gameFilter) li.alpha = 0.3;
+					if (li.text != _gameFilter) li.alpha = 0.4;
 				}
 			).attach(_gameType);
 			
 			// filter by game type on legend click
 			new ClickControl(LegendItem, 1, function(e:SelectionEvent):void {
-				_gameType.setItemProperties({alpha:0.3});
+				_gameType.setItemProperties({alpha:0.4});
 				e.object.alpha = 1;
 				_gameFilter = LegendItem(e.object).text;
 				fireGameTypeChanged(LegendItem(e.object).text); //gameType(LegendItem(e.object).text);
@@ -225,8 +280,10 @@ package cs448b.as3.ui
 					_roundSelect.enabled = false;
 			}).attach(_gameType);
 			
-			
-            //var dp:DataProvider = new DataProvider();
+            _roundTitleText = new TextSprite("", _sectionFormat);
+            _roundTitleText.text = "Game";
+            this.addChild( _roundTitleText );	
+
             var totalEntries:uint = 38;
             var i:uint;
      
@@ -246,28 +303,17 @@ package cs448b.as3.ui
 			fireRoundNo(_roundSelect.selectedIndex+1);//roundNo(_roundSelect.selectedIndex+1);
         }
 
-//		private var _shotSlider:Slider;
 		private var _shotTitleText:TextSprite;
-//		private var _shotText:TextSprite;
 		private var _shotType:Legend;
 		private var _shotFilter:String = "Shots";
-//		public var shotType:Function;
+
 		
 		private function addShotType():void
 		{
-//			_shotSlider = new Slider();
-//            _shotSlider.value = 2;			
-//            _shotSlider.addEventListener( SliderEvent.CHANGE, showShotTypeValue );
-//            this.addChild( _shotSlider );
-
             _shotTitleText = new TextSprite("", _sectionFormat);
             _shotTitleText.text = "Shot Type";
             this.addChild( _shotTitleText );
-            
-//            _shotText = new TextSprite("", _textFormat);
-//            _shotText.horizontalAnchor = TextSprite.CENTER;
-//            _shotText.text = "Goals           Shots on Goal           Shots";
-//            this.addChild( _shotText );		
+
             
 			// create filter
 			_shotType = Legend.fromValues(null, [
@@ -276,9 +322,9 @@ package cs448b.as3.ui
 				{label:"Shots", color:0xff88ff88}
 			]);
 			_shotType.orientation = Orientation.LEFT_TO_RIGHT;
-			_shotType.labelTextFormat = _sectionFormat;
+			_shotType.labelTextFormat = _legendFormat;
 			_shotType.margin = 3;
-			_shotType.setItemProperties({buttonMode:true, alpha:0.3});
+			_shotType.setItemProperties({buttonMode:true, alpha:0.4});
 			_shotType.items.getChildAt(2).alpha = 1;
 			_shotType.update();
 			addChild(_shotType);
@@ -288,13 +334,13 @@ package cs448b.as3.ui
 				function(e:SelectionEvent):void { e.object.alpha = 1; },
 				function(e:SelectionEvent):void {
 					var li:LegendItem = LegendItem(e.object);
-					if (li.text != _shotFilter) li.alpha = 0.3;
+					if (li.text != _shotFilter) li.alpha = 0.4;
 				}
 			).attach(_shotType);
 			
 			// filter by game type on legend click
 			new ClickControl(LegendItem, 1, function(e:SelectionEvent):void {
-				_shotType.setItemProperties({alpha:0.3});
+				_shotType.setItemProperties({alpha:0.4});
 				e.object.alpha = 1;
 				_shotFilter = LegendItem(e.object).text;
 				
@@ -307,10 +353,6 @@ package cs448b.as3.ui
 			}).attach(_shotType);
 			            	
 		}
-//        private function showShotTypeValue( sliderEvent:SliderEvent ):void
-//        {
-//			shotType(sliderEvent.value);
-//        }
         		
 		private var _speedSlider:Slider;
 		private var _speedTitleText:TextSprite;
@@ -347,7 +389,6 @@ package cs448b.as3.ui
 		private var _timeText:TextSprite;
 		private var _timeCurrent:TextField;
 		private var _timeCurrentMin:TextSprite;
-//		public var timeCurrent:Function;
 		
 		private function addTime():void
 		{
@@ -406,18 +447,22 @@ package cs448b.as3.ui
         	if (_playButton.label == "Play")
 	        {
 	        	_playButton.label = "Stop";
+	        	fireImmediate(true);
 	        	curInterval = setInterval(playMovie, _playSpeed);	        	
 	        }
 	        else
 	        {
+	        	fireImmediate(false);
 	        	_playButton.label = "Play";
 	        }	
         }    
 
 		private function playMovie():void
 		{
+			// Play is over, so stop.
 			if (_timeSlider.value == 90)
 			{
+				fireImmediate(false);
 				_playButton.label = "Play";
 				clearInterval(curInterval);
 				return;
@@ -431,44 +476,44 @@ package cs448b.as3.ui
 		{
 			if (_season) {
 				_season.x = 10;
-				_season.y = 10; //_bounds.top - _title.height - 45;
+				_season.y = 10; 
 			}			
 			if (_team) {
 				_team.x = 100;
-				_team.y = 10; //_bounds.top - _title.height - 45;
+				_team.y = 10; 
 			}	
+			if (_homeText) {
+				_homeText.x = 370;
+				_homeText.y = 330;
+			}	
+			if (_awayText) {
+				_awayText.x = 180;
+				_awayText.y = 330; 
+			}							
 			var x:Number = 550;
-			var y:Number = 100;
+			var y:Number = 70;
 			if (_gameType) {
 	            _gameType.x = x;
-	            _gameType.y = y;
+	            _gameType.y = y+25;
 			}	
 			if (_roundSelect) {
-				_roundSelect.move(x+100, y+30);
-					
+				_roundSelect.move(x+130, y+50);					
 			}
+			if (_roundTitleText) {
+	            _roundTitleText.x = x-20;
+	            _roundTitleText.y = y;				
+			}			
 			y = 200;	
-//			if (_shotSlider) {
-//				_shotSlider.x = x;
-//				_shotSlider.y = y;
-//				_shotSlider.setSize(200, 30);
-//				// 0: Goals, 1: Shots on goals, 2: Shots
-//				_shotSlider.minimum = 0;
-//				_shotSlider.maximum = 2;
-//			}
+
 			if (_shotType) {
 	            _shotType.x = x;
 	            _shotType.y = y;
 			}	
 			if (_shotTitleText) {
-	            _shotTitleText.x = x;
+	            _shotTitleText.x = x-20;
 	            _shotTitleText.y = y-30;
 			}			
-//			if (_shotText) {
-//	            _shotText.x = x+100;
-//	            _shotText.y = y+30;
-//			}
-	
+
 			y = 300;
 			if (_speedSlider) {
 				_speedSlider.x = x;
@@ -479,7 +524,7 @@ package cs448b.as3.ui
 				_speedSlider.maximum = 4;
 			}
 			if (_speedTitleText) {
-	            _speedTitleText.x = x;
+	            _speedTitleText.x = x-20;
 	            _speedTitleText.y = y-30;
 			}				
 			if (_speedText) {
@@ -495,12 +540,12 @@ package cs448b.as3.ui
 				_timeSlider.setSize(500, 30);
 			}
 			if (_timeTitleText) {
-	            _timeTitleText.x = x;
+	            _timeTitleText.x = x-20;
 	            _timeTitleText.y = y-30;
 			}				
 			if (_timeText) {
 	            _timeText.x = x+250;
-	            _timeText.y = y+30;
+	            _timeText.y = y+20;
 			}	
 			if (_timeCurrent) {
 	            _timeCurrent.x = x+530;
@@ -526,7 +571,9 @@ package cs448b.as3.ui
 				for (var i:Number=0; i<totalPlayers; i++)
 				{	
 					_playerBox[i].x = 800;
-					_playerBox[i].y = i*20+30;				
+					_playerBox[i].y = i*20+30;	
+					_playerName[i].x = 850;
+					_playerName[i].y = i*20+33;			
 				}
 			}			
 		}
