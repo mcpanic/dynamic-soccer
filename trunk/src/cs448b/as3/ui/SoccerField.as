@@ -15,7 +15,7 @@ package cs448b.as3.ui
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	
-	public class SoccerField extends Sprite
+	public class SoccerField extends Sprite implements ControlListener
 	{
 		private var fieldWidth:Number = 385;
 		private var fieldHeight:Number = 265;
@@ -143,7 +143,7 @@ package cs448b.as3.ui
 			vis.operators.add(new AxisLayout("data.X", "data.Y"));
 			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
                 "lineColor", ScaleType.CATEGORIES, 
-                new ColorPalette([0xffd62728, 0xffaec7e8, 0xafffffff])));
+                new ColorPalette([0xffd62728, 0xafaec7e8, 0xafaaaaaa])));
 			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
 			
             vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
@@ -242,6 +242,16 @@ package cs448b.as3.ui
 		{
 			_timeCurrent = tc;
 			vis.update(new Transitioner(transTime)).play();			
+		}
+		
+		public function get immediate():Boolean
+		{
+			return vis.operators[3].immediate;
+		}
+		
+		public function set immediate(im:Boolean):void
+		{
+			vis.operators[3].immediate = im; // filter immediately!
 		}
 	}
 
