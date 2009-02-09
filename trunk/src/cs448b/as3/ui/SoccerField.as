@@ -188,13 +188,13 @@ package cs448b.as3.ui
 			if(_playerArray == null) return true;
 			else
 			{
-				for(var i:Number = 0; i < _playerArray.length(); i++)
+				for(var i:Number = 0; i < _playerArray.length; i++)
 				{
 					if(_playerArray[i] as Number == d.data.Player) return true;
 				}
 			}
 			
-			return true;
+			return false;
 		}
 		
 		private function goalFilter(d:DataSprite):Boolean
