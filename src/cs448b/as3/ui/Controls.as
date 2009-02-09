@@ -575,5 +575,14 @@ package cs448b.as3.ui
 				cl.roundNo(rn);
 			}	
 		}	
+		
+		private function fireImmediate(b:Boolean):void
+		{
+			for(var o:Object in _controlListener)
+			{
+				var cl:ControlListener = _controlListener[o] as ControlListener;
+				cl.immediate = b;
+			}
+		}
 	}
 }
