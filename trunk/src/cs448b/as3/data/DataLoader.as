@@ -26,7 +26,7 @@ package cs448b.as3.data
 		 */
 		public function DataLoader()
 		{
-			dataAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/goal2.txt";
+			dataAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/goal.txt";
 			playerAddress = "http://www.stanford.edu/~hskim08/dynamicsoccer/player.txt";
 			matchAddress = "http://www.stanford.edu/~hskim08/dynamicsoccer/match.txt";
 		}

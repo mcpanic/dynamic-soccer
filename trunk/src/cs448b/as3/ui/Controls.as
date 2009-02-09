@@ -261,7 +261,11 @@ package cs448b.as3.ui
             _shotText.text = "Goals           Shots on Goal           Shots";
             this.addChild( _shotText );			
 		}
-		
+        private function showShotTypeValue( sliderEvent:SliderEvent ):void
+        {
+			shotType(sliderEvent.value);
+        }
+        		
 		private var _speedSlider:Slider;
 		private var _speedTitleText:TextSprite;
 		private var _speedText:TextSprite;
@@ -281,19 +285,26 @@ package cs448b.as3.ui
             _speedText.text = "Slowest   Slow    Normal    Fast    Fastest";
             this.addChild( _speedText );			
 		}
-
+		
+        private function showSpeedValue( sliderEvent:SliderEvent ):void
+        {
+            //_speedText.htmlText = "Slider = " + sliderEvent.value.toString();
+        }
+        
 		import flash.text.TextField;
-
+		import flash.text.TextFieldAutoSize;
 		private var _timeSlider:Slider;
 		private var _timeTitleText:TextSprite;
 		private var _timeText:TextSprite;
 		private var _timeCurrent:TextField;
 		private var _timeCurrentMin:TextSprite;
+		public var timeCurrent:Function;
 		
 		private function addTime():void
 		{
 			_timeSlider = new Slider();
             _timeSlider.addEventListener( SliderEvent.CHANGE, showTimeValue );
+            _timeSlider.value = 500;
             this.addChild( _timeSlider );
 
             _timeTitleText = new TextSprite("", _sectionFormat);
@@ -307,7 +318,9 @@ package cs448b.as3.ui
 
             _timeCurrent = new TextField();
             _timeCurrent.defaultTextFormat = _textFormat;
-            _timeCurrent.text = "0";
+            _timeCurrent.background = true;
+            _timeCurrent.autoSize = TextFieldAutoSize.LEFT;
+            _timeCurrent.text = "90";
             this.addChild( _timeCurrent );	 
                        
             _timeCurrentMin = new TextSprite("", _textFormat);
@@ -317,17 +330,12 @@ package cs448b.as3.ui
 		}	
 		
 		
-        private function showShotTypeValue( sliderEvent:SliderEvent ):void
-        {
-			shotType(sliderEvent.value);
-        }
-        private function showSpeedValue( sliderEvent:SliderEvent ):void
-        {
-            //_speedText.htmlText = "Slider = " + sliderEvent.value.toString();
-        }
+
+
         private function showTimeValue( sliderEvent:SliderEvent ):void
         {
             _timeCurrent.text = sliderEvent.value.toString();
+            timeCurrent(sliderEvent.value);
         }        
 		
 		public function layout():void
@@ -405,13 +413,13 @@ package cs448b.as3.ui
 	            _timeText.y = y+30;
 			}	
 			if (_timeCurrent) {
-	            _timeText.x = x+510;
-	            _timeText.y = y+30;			
+	            _timeCurrent.x = x+530;
+	            _timeCurrent.y = y+30;			
 			}
 			
 			if (_timeCurrentMin) {
-	            _timeText.x = x+530;
-	            _timeText.y = y+30;				
+	            _timeCurrentMin.x = x+580;
+	            _timeCurrentMin.y = y+30;				
 			}
 			
 			x = 800;

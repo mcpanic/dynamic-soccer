@@ -54,6 +54,7 @@ package {
 			controls.shotType = soccerField.shotType;
 			controls.roundNo = soccerField.roundNo;
 			controls.playerNo = soccerField.playerNo;
+			controls.timeCurrent = soccerField.timeCurrent;
 		}
 		
 		/**
