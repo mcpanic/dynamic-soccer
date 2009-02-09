@@ -11,6 +11,7 @@ package cs448b.as3.data
 	{		
 		private var dataAddress:String;
 		private var _data:Data;
+		private var _data2:Data;
 		
 		private var matchAddress:String;
 		private var _matchData:Data;
@@ -36,6 +37,14 @@ package cs448b.as3.data
 		public function get data():Data
 		{
 			return _data;
+		}
+		
+		/**
+		 * Returns the goal data.
+		 */
+		public function get data2():Data
+		{
+			return _data2;
 		}
 		
 		/**
@@ -70,6 +79,7 @@ package cs448b.as3.data
 	                
 	                // Use default function to import data
 	                _data = Data.fromDataSet( dataSet );
+	                _data2 = Data.fromDataSet( dataSet );
            
 					//testData();
 					

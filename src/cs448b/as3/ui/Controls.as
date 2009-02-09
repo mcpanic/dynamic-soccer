@@ -160,7 +160,7 @@ package cs448b.as3.ui
 			var no:Number = event.target.label;
 			trace (no);
     		var index:Number = _playerArray.indexOf(no);
-    		trace(index);
+//    		trace(index);
     		// if this item is unselected
 			if (index != -1)
 				_playerArray.splice(index, 1);	

@@ -1,5 +1,6 @@
 package {
 	import cs448b.as3.data.DataLoader;
+	import cs448b.as3.ui.BarChart;
 	import cs448b.as3.ui.Controls;
 	import cs448b.as3.ui.SoccerField;
 	
@@ -12,22 +13,20 @@ package {
 	
 	public class DynamicSoccer extends Sprite
 	{
-		private var soccerField:SoccerField;
 		private var dataLoader:DataLoader;
-		private var controls:Controls; 
 		
+		private var soccerField:SoccerField;
+		private var barChart:BarChart
+		private var controls:Controls;
 		/**
 		 * Constructor
 		 */
 		public function DynamicSoccer()
 		{	
 			loadData();
-			// Init sprite
-			var rect:Sprite = new Sprite();
 			
 			initComponents();
 			buildSprite();
-			
 		}
 
 		/**
@@ -38,7 +37,6 @@ package {
 			dataLoader = new DataLoader();
 			dataLoader.addLoadEventListener(handleLoaded); 
 			dataLoader.loadData();
-
 		}
 				
 		/**
@@ -47,6 +45,8 @@ package {
 		public function initComponents():void
 		{
 			soccerField = new SoccerField();
+			barChart = new BarChart();
+			
 			controls = new Controls();
 			
 			// register callbacks
@@ -63,8 +63,13 @@ package {
 		{
 			soccerField.x = 100;
 			soccerField.y = 50;
-			this.addChild(soccerField);
-			this.addChild(controls);
+			addChild(soccerField);
+			
+			addChild(controls);
+			
+			barChart.x = 100;
+			barChart.y = 450;
+			addChild(barChart);
 		}
 
 		/**
@@ -72,7 +77,8 @@ package {
 		 */
 		public function handleLoaded( evt:Event ):void
 		{
-			soccerField.drawPoints(dataLoader.data);
+			barChart.registerData(dataLoader.data2);
+			soccerField.registerData(dataLoader.data);
 		}
 	}
 }
