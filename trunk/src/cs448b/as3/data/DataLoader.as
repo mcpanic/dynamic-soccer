@@ -20,15 +20,17 @@ package cs448b.as3.data
 		private var _playerData:Data
 
 		private var cb:Function = null;
+		private var pcb:Function = null;
+		private var mcb:Function = null;
 		
 		/**
 		 * Constructor
 		 */
 		public function DataLoader()
 		{
-			dataAddress = "http://www.stanford.edu/~hskim08/dynamicsoccer/goal.txt";
-			playerAddress = "http://www.stanford.edu/~hskim08/dynamicsoccer/player.txt";
-			matchAddress = "http://www.stanford.edu/~hskim08/dynamicsoccer/match.txt";
+			dataAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/goal.txt";
+			playerAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/player.txt";
+			matchAddress = "http://www.stanford.edu/~juhokim/dynamicsoccer/match.txt";
 		}
 		
 		/**
@@ -96,6 +98,8 @@ package cs448b.as3.data
 	                
 	                // Use default function to import data
 	                _playerData = Data.fromDataSet( dataSet );
+	                
+	                if(pcb != null) pcb( evt );
             	}
             );
             
@@ -108,6 +112,8 @@ package cs448b.as3.data
 	                
 	                // Use default function to import data
 	                _matchData = Data.fromDataSet( dataSet );
+	                
+	                if(mcb != null) mcb( evt );
             	}
             );
         }
@@ -126,6 +132,22 @@ package cs448b.as3.data
         public function removeLoadEventListener():void
         {
         	cb = null;
+        }
+        
+        /**
+         * Adds a load event listener 
+         */
+        public function addPlayerLoadListener(callback:Function):void
+        {
+        	pcb = callback;
+        }
+        
+        /**
+         * Adds a load event listener 
+         */
+        public function addMatchLoadListener(callback:Function):void
+        {
+        	mcb = callback;
         }
 	}
 }

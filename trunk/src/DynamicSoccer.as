@@ -36,6 +36,7 @@ package {
 		{
 			dataLoader = new DataLoader();
 			dataLoader.addLoadEventListener(handleLoaded); 
+			dataLoader.addPlayerLoadListener(handlePlayerLoaded);
 			dataLoader.loadData();
 		}
 				
@@ -48,15 +49,7 @@ package {
 			barChart = new BarChart();
 			
 			controls = new Controls();
-			
-			// register callbacks
-//			controls.gameType = soccerField.gameType;
-//			controls.shotType = soccerField.shotType;
-//			controls.roundNo = soccerField.roundNo;
-//			controls.playerNo = soccerField.playerNo;
-//			controls.timeCurrent = soccerField.timeCurrent;
-//			
-//			controls.shotType = barChart.shotType;
+
 			controls.addControlListener(soccerField);
 			controls.addControlListener(barChart);
 		}
@@ -84,6 +77,15 @@ package {
 		{
 			barChart.registerData(dataLoader.data2);
 			soccerField.registerData(dataLoader.data);
+//			controls.registerData(dataLoader.playerData);
+		}
+		
+		/**
+		 * Handles the player data loaded event
+		 */
+		public function handlePlayerLoaded( evt:Event ):void
+		{
+			controls.registerData(dataLoader.playerData);
 		}
 	}
 }
