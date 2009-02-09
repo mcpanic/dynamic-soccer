@@ -238,20 +238,6 @@ package cs448b.as3.ui
         {
 			roundNo(_roundSelect.selectedIndex+1);
         }
-        
-		/** Callback for filter events. */
-		private function onFilter(evt:Event=null):void
-		{
-//			_query = _search.query.toLowerCase().split(/\|/);
-//			if (_query.length==1 && _query[0].length==0) _query.pop();
-//			
-//			if (_t && _t.running) _t.stop();
-//			_t = _vis.update(_dur);
-//			_t.play();
-//			
-//			_exact = false; // reset exact match after each search
-		}
-
 
 		private var _shotSlider:Slider;
 		private var _shotTitleText:TextSprite;
@@ -296,10 +282,13 @@ package cs448b.as3.ui
             this.addChild( _speedText );			
 		}
 
+		import flash.text.TextField;
+
 		private var _timeSlider:Slider;
 		private var _timeTitleText:TextSprite;
 		private var _timeText:TextSprite;
-//		private var _roundSelect:ComboBox;
+		private var _timeCurrent:TextField;
+		private var _timeCurrentMin:TextSprite;
 		
 		private function addTime():void
 		{
@@ -314,7 +303,17 @@ package cs448b.as3.ui
             _timeText = new TextSprite("", _textFormat);
             _timeText.horizontalAnchor = TextSprite.CENTER;
             _timeText.text = "0                  15                  30                  45                  60                  75                  90";
-            this.addChild( _timeText );				
+            this.addChild( _timeText );		
+
+            _timeCurrent = new TextField();
+            _timeCurrent.defaultTextFormat = _textFormat;
+            _timeCurrent.text = "0";
+            this.addChild( _timeCurrent );	 
+                       
+            _timeCurrentMin = new TextSprite("", _textFormat);
+            _timeCurrentMin.horizontalAnchor = TextSprite.CENTER;
+            _timeCurrentMin.text = "min.";
+            this.addChild( _timeCurrentMin );	             		
 		}	
 		
 		
@@ -328,7 +327,7 @@ package cs448b.as3.ui
         }
         private function showTimeValue( sliderEvent:SliderEvent ):void
         {
-            //_timeText.htmlText = "Slider = " + sliderEvent.value.toString();
+            _timeCurrent.text = sliderEvent.value.toString();
         }        
 		
 		public function layout():void
@@ -405,6 +404,16 @@ package cs448b.as3.ui
 	            _timeText.x = x+250;
 	            _timeText.y = y+30;
 			}	
+			if (_timeCurrent) {
+	            _timeText.x = x+510;
+	            _timeText.y = y+30;			
+			}
+			
+			if (_timeCurrentMin) {
+	            _timeText.x = x+530;
+	            _timeText.y = y+30;				
+			}
+			
 			x = 800;
 			y = 600;	
 			if (_playerSelect) {
