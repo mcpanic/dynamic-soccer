@@ -1,5 +1,6 @@
 package {
 	import cs448b.as3.data.DataLoader;
+	import cs448b.as3.data.MatchData;
 	import cs448b.as3.data.PlayerData;
 	import cs448b.as3.ui.BarChart;
 	import cs448b.as3.ui.Controls;
@@ -14,19 +15,18 @@ package {
 	
 	public class DynamicSoccer extends Sprite
 	{
-		private var dataLoader:DataLoader;
-		
+		private var dataLoader:DataLoader;		
 		private var soccerField:SoccerField;
 		private var barChart:BarChart
 		private var controls:Controls;
 		private var pData:PlayerData;
+		private var mData:MatchData;
 		/**
 		 * Constructor
 		 */
 		public function DynamicSoccer()
 		{	
-			loadData();
-			
+			loadData();			
 			initComponents();
 			buildSprite();
 		}
@@ -39,6 +39,7 @@ package {
 			dataLoader = new DataLoader();
 			dataLoader.addLoadEventListener(handleLoaded); 
 			dataLoader.addPlayerLoadListener(handlePlayerLoaded);
+			dataLoader.addMatchLoadListener(handleMatchLoaded);
 			dataLoader.loadData();
 		}
 				
@@ -49,13 +50,12 @@ package {
 		{
 			soccerField = new SoccerField();
 			barChart = new BarChart();
-			
 			controls = new Controls();
-
 			controls.addControlListener(soccerField);
 			controls.addControlListener(barChart);
 			
 			pData = new PlayerData();
+			mData = new MatchData();
 		}
 		
 		/**
@@ -93,5 +93,13 @@ package {
 			controls.updatePlayerData(pData);
 			soccerField.updatePlayerData(pData);
 		}
+		/**
+		 * Handles the match data loaded event
+		 */
+		public function handleMatchLoaded( evt:Event ):void
+		{
+			mData.registerData(dataLoader.matchData);
+			controls.updateMatchData(mData);
+		}		
 	}
 }
