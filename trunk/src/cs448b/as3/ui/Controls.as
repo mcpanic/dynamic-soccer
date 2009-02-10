@@ -1,5 +1,6 @@
 package cs448b.as3.ui
 {
+	import cs448b.as3.data.MatchData;
 	import cs448b.as3.data.PlayerData;
 	
 	import fl.controls.Slider;
@@ -21,6 +22,7 @@ package cs448b.as3.ui
 	public class Controls extends Sprite
 	{
 		private var pData:PlayerData;
+		private var mData:MatchData;
 		private var _seasonText:String =	"2007/08";
 		private var _season:TextSprite;
 		private var _teamText:String =	"Manchester United";
@@ -36,10 +38,12 @@ package cs448b.as3.ui
 		private var _controlListener:Array = new Array(2);
 
 		private var totalPlayers:Number = 27;
+		private var totalRounds:Number = 38;
 		
 		public function Controls()
 		{
 			pData = new PlayerData();
+			mData = new MatchData();
 			_titleFormat = new TextFormat("Verdana,Tahoma,Arial",16,0,true);
 			_sectionFormat = new TextFormat("Verdana,Tahoma,Arial",12,0,true);
 			_legendFormat = new TextFormat("Verdana,Tahoma,Arial",11,0,true);
@@ -90,6 +94,7 @@ package cs448b.as3.ui
         import flash.events.MouseEvent;
 		
 //		public var playerNo:Function;
+		private var _playerTitleText:TextSprite;
 		private var _playerArray:Array;
     	private var _playerSelect:Legend;
         private var _playerBox:Array;
@@ -103,7 +108,11 @@ package cs448b.as3.ui
     	private function addPlayer():void
 		{
 			var i:uint;
-			
+            
+            _playerTitleText = new TextSprite("", _sectionFormat);
+            _playerTitleText.text = "Players";
+            this.addChild( _playerTitleText );	
+            			
 			_playerBox = new Array();
 			_playerArray = new Array();	
 			_playerName = new Array();		
@@ -181,7 +190,15 @@ package cs448b.as3.ui
             	_playerName[i].htmlText = pData.getFirstName(i) + " " + pData.getLastName(i);						          	
 			}	
 		}
-        
+		public function updateMatchData(maData:MatchData):void 
+		{
+			mData = null;
+			mData = maData;
+			for(var i:uint=0; i<totalRounds; i++)
+			{
+					          	
+			}	
+		}        
         private function playerHandler( event:MouseEvent ):void
         {
 			
@@ -200,11 +217,13 @@ package cs448b.as3.ui
         
     	import fl.controls.ComboBox;
 		import fl.events.ComponentEvent;
-		
+		import flare.util.Strings;
+			
 		private var _gameType:Legend;
 		private var _gameFilter:String = "All";
 		private var _roundTitleText:TextSprite;
     	private var _roundSelect:ComboBox;
+		private var _roundText:TextSprite;
 		
 		private function addGame():void
 		{
@@ -259,12 +278,26 @@ package cs448b.as3.ui
 			_roundSelect.move(650, 130);
 			_roundSelect.addEventListener(Event.CHANGE, roundHandler);
 			_roundSelect.enabled = false;
-			this.addChild(_roundSelect);				
+			this.addChild(_roundSelect);	
+				
+            _roundText = new TextSprite("", _textFormat);
+            //_roundText.horizontalAnchor = TextSprite.LEFT;
+            _roundText.htmlText = Strings.format("a<br>b</br>");
+            this.addChild( _roundText );						
 		}
 		
         private function roundHandler( event:Event ):void
         {
-			fireRoundNo(_roundSelect.selectedIndex+1);//roundNo(_roundSelect.selectedIndex+1);
+        	var index:Number = _roundSelect.selectedIndex+1;
+			fireRoundNo(index);//roundNo(_roundSelect.selectedIndex+1);
+			
+			_roundText.htmlText = Strings.format(
+				"<b>{0}</b><br/><br/>vs.{1} {2} {3}",
+				(mData.isHome(index)? "Home":"Away"), 
+				mData.getOpponent(index), 
+				mData.getScore(index), 
+				mData.getResult(index)
+				);
         }
 
 		private var _shotTitleText:TextSprite;
@@ -466,7 +499,12 @@ package cs448b.as3.ui
 			if (_roundTitleText) {
 	            _roundTitleText.x = x-20;
 	            _roundTitleText.y = y;				
-			}			
+			}	
+			if (_roundText) {
+				
+	            _roundText.x = x;
+	            _roundText.y = y+50;				
+			}						
 			y = 200;	
 
 			if (_shotType) {
@@ -526,18 +564,22 @@ package cs448b.as3.ui
 	            _playButton.y = y-10;		
 			}
 			x = 800;
-			y = 600;	
+			y = 650;	
+			if (_playerTitleText) {
+            	_playerTitleText.x = x;
+            	_playerTitleText.y = 70;
+			}				
 			if (_playerSelect) {
-            	_playerSelect.x = x;
+            	_playerSelect.x = x+20;
             	_playerSelect.y = y;
 			}	
 			if (_playerBox) {
 				for (var i:Number=0; i<totalPlayers; i++)
 				{	
-					_playerBox[i].x = 800;
-					_playerBox[i].y = i*20+30;	
-					_playerName[i].x = 850;
-					_playerName[i].y = i*20+33;			
+					_playerBox[i].x = x;
+					_playerBox[i].y = i*20+100;	
+					_playerName[i].x = x+50;
+					_playerName[i].y = i*20+103;			
 				}
 			}			
 		}
