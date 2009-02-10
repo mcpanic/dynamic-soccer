@@ -108,6 +108,7 @@ package cs448b.as3.ui
 				_playerBox.push(new CheckBox());
 				_playerBox[i].label = getPlayerNumber(i);
 				_playerBox[i].selected = true;
+//				_playerArray.push(getPlayerNumber(i));
             	_playerBox[i].addEventListener(MouseEvent.CLICK,playerHandler);
             	addChild(_playerBox[i]);
             	
@@ -192,28 +193,31 @@ package cs448b.as3.ui
 		{
 			for(var i:uint=0; i<totalPlayers; i++)
 			{
+				_playerArray.push(getPlayerNumber(i));				          	
+			}	
+			trace(_playerArray);
+			_playerArray.sort(Array.NUMERIC);		
+			trace(_playerArray);
+			
+			for(var i:uint=0; i<totalPlayers; i++)
+			{
 				_playerBox[i].label = getPlayerNumber(i);
-            	_playerName[i].htmlText = getFirstName(i) + " " + getLastName(i);
-            	
-			}				
+            	_playerName[i].htmlText = getFirstName(i) + " " + getLastName(i);				          	
+			}	
+
 		}
 		private function getPlayerNumber(no:Number):Number
 		{
-			//return 1;
 			if(numberList != null) return numberList[no];
 			else return 1;
 		}			
         private function getFirstName(no:Number):String
         {
-//        	return firstNameList[no];
-        	//return "Juho";
         	if(firstNameList != null) return firstNameList[no];
 			else return "Juho";
         }
         private function getLastName(no:Number):String
         {
-//        	return lastNameList[no];
-        	//return "Kim";
         	if(lastNameList != null) return lastNameList[no];
 			else return "Kim";
         }   
