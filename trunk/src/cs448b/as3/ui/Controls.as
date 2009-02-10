@@ -224,6 +224,7 @@ package cs448b.as3.ui
 		private var _roundTitleText:TextSprite;
     	private var _roundSelect:ComboBox;
 		private var _roundText:TextSprite;
+		private var _roundText2:TextSprite;
 		
 		private function addGame():void
 		{
@@ -258,9 +259,17 @@ package cs448b.as3.ui
 				_gameFilter = LegendItem(e.object).text;
 				fireGameTypeChanged(LegendItem(e.object).text); //gameType(LegendItem(e.object).text);
 				if (_gameFilter == "Single")
+				{
+					_roundText.alpha = 1;
+					_roundText2.alpha = 1;					
 					_roundSelect.enabled = true;
+				}
 				else
+				{
+					_roundText.alpha = 0.4;
+					_roundText2.alpha = 0.4;
 					_roundSelect.enabled = false;
+				}
 			}).attach(_gameType);
 			
             _roundTitleText = new TextSprite("", _sectionFormat);
@@ -280,23 +289,33 @@ package cs448b.as3.ui
 			_roundSelect.enabled = false;
 			this.addChild(_roundSelect);	
 				
-            _roundText = new TextSprite("", _textFormat);
-            //_roundText.horizontalAnchor = TextSprite.LEFT;
-            _roundText.htmlText = Strings.format("a<br>b</br>");
-            this.addChild( _roundText );						
+            _roundText = new TextSprite("", _sectionFormat);
+            _roundText.horizontalAnchor = TextSprite.LEFT;
+            _roundText.htmlText = "Game score";
+            _roundText.alpha = 0.4;
+            this.addChild( _roundText );	
+                     		
+            _roundText2 = new TextSprite("", _textFormat);
+            _roundText2.horizontalAnchor = TextSprite.LEFT;
+            _roundText2.htmlText = "   Game detail";
+            _roundText2.alpha = 0.4;
+            this.addChild( _roundText2 );	
 		}
 		
         private function roundHandler( event:Event ):void
         {
-        	var index:Number = _roundSelect.selectedIndex+1;
-			fireRoundNo(index);//roundNo(_roundSelect.selectedIndex+1);
+        	var index:Number = _roundSelect.selectedIndex;
+			fireRoundNo(index+1);//roundNo(_roundSelect.selectedIndex+1);
 			
 			_roundText.htmlText = Strings.format(
-				"<b>{0}</b><br/><br/>vs.{1} {2} {3}",
-				(mData.isHome(index)? "Home":"Away"), 
-				mData.getOpponent(index), 
+				"<b>{0} {1}</b>",			
 				mData.getScore(index), 
 				mData.getResult(index)
+			);
+			_roundText2.htmlText = Strings.format(
+				"{0} game vs.{1}",
+				(mData.isHome(index)? "Home":"Away"), 
+				mData.getOpponent(index)
 				);
         }
 
@@ -500,12 +519,15 @@ package cs448b.as3.ui
 	            _roundTitleText.x = x-20;
 	            _roundTitleText.y = y;				
 			}	
-			if (_roundText) {
-				
+			if (_roundText) {				
 	            _roundText.x = x;
-	            _roundText.y = y+50;				
-			}						
-			y = 200;	
+	            _roundText.y = y+53;				
+			}	
+			if (_roundText2) {				
+	            _roundText2.x = x;
+	            _roundText2.y = y+80;				
+			}									
+			y = 230;	
 
 			if (_shotType) {
 	            _shotType.x = x;
