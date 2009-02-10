@@ -1,5 +1,7 @@
 package cs448b.as3.ui
 {
+	import cs448b.as3.data.PlayerData;
+	
 	import fl.controls.Slider;
 	import fl.events.SliderEvent;
 	
@@ -18,6 +20,7 @@ package cs448b.as3.ui
 	
 	public class Controls extends Sprite
 	{
+		private var pData:PlayerData;
 		private var _seasonText:String =	"2007/08";
 		private var _season:TextSprite;
 		private var _teamText:String =	"Manchester United";
@@ -36,6 +39,7 @@ package cs448b.as3.ui
 		
 		public function Controls()
 		{
+			pData = new PlayerData();
 			_titleFormat = new TextFormat("Verdana,Tahoma,Arial",16,0,true);
 			_sectionFormat = new TextFormat("Verdana,Tahoma,Arial",12,0,true);
 			_legendFormat = new TextFormat("Verdana,Tahoma,Arial",11,0,true);
@@ -106,14 +110,16 @@ package cs448b.as3.ui
 			for(i=0; i<totalPlayers; i++)
 			{
 				_playerBox.push(new CheckBox());
-				_playerBox[i].label = getPlayerNumber(i);
+//				_playerBox[i].label = pData.getPlayerNumber(i);
+				_playerBox[i].label = "0";
 				_playerBox[i].selected = true;
 //				_playerArray.push(getPlayerNumber(i));
             	_playerBox[i].addEventListener(MouseEvent.CLICK,playerHandler);
             	addChild(_playerBox[i]);
             	
             	_playerName.push(new TextSprite("", _textFormat, TextSprite.DEVICE));
-            	_playerName[i].htmlText = getFirstName(i) + " " + getLastName(i);
+//            	_playerName[i].htmlText = pData.getFirstName(i) + " " + pData.getLastName(i);
+            	_playerName[i].htmlText = "Loading...";
             	this.addChild(_playerName[i]);
 			}	
 			         				
@@ -151,7 +157,7 @@ package cs448b.as3.ui
 					for (i=0; i<totalPlayers; i++)
 					{
 						_playerBox[i].selected = true;
-						_playerArray.push(getPlayerNumber(i));
+						_playerArray.push(pData.getPlayerNumber(i));
 					}			
 				}	
 				else if (LegendItem(e.object).text == "None")
@@ -164,63 +170,17 @@ package cs448b.as3.ui
 
 		}
 
-
-		import flare.vis.data.Data;	
-		import flare.vis.data.DataSprite;	
-		private var numberList:Array;
-//		var numberList:Array = new Array(1,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,21,22,24,25,27,29,31,32,33,38);
-		private var firstNameList:Array;
-		private var lastNameList:Array;
-		
-		private function getPlayerData(d:DataSprite):void
+		public function updatePlayerData(plData:PlayerData):void 
 		{
-			numberList.push(d.data.Number);
-			firstNameList.push(d.data.FirstName);
-			lastNameList.push(d.data.LastName);
-			
-			//return false;
-		}	
-		public function registerData(d:Data):void
-		{
-			numberList = new Array();
-			firstNameList = new Array();
-			lastNameList = new Array();
-			d.visit(getPlayerData);
-			updatePlayerData();
-		}
-		
-		private function updatePlayerData():void 
-		{
+			pData = null;
+			pData = plData;
 			for(var i:uint=0; i<totalPlayers; i++)
 			{
-				_playerArray.push(getPlayerNumber(i));				          	
+				_playerArray.push(pData.getPlayerNumber(i));			
+				_playerBox[i].label = pData.getPlayerNumber(i);
+            	_playerName[i].htmlText = pData.getFirstName(i) + " " + pData.getLastName(i);						          	
 			}	
-			trace(_playerArray);
-			_playerArray.sort(Array.NUMERIC);		
-			trace(_playerArray);
-			
-			for(var i:uint=0; i<totalPlayers; i++)
-			{
-				_playerBox[i].label = getPlayerNumber(i);
-            	_playerName[i].htmlText = getFirstName(i) + " " + getLastName(i);				          	
-			}	
-
 		}
-		private function getPlayerNumber(no:Number):Number
-		{
-			if(numberList != null) return numberList[no];
-			else return 1;
-		}			
-        private function getFirstName(no:Number):String
-        {
-        	if(firstNameList != null) return firstNameList[no];
-			else return "Juho";
-        }
-        private function getLastName(no:Number):String
-        {
-        	if(lastNameList != null) return lastNameList[no];
-			else return "Kim";
-        }   
         
         private function playerHandler( event:MouseEvent ):void
         {

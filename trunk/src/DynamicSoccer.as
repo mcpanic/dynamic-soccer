@@ -1,5 +1,6 @@
 package {
 	import cs448b.as3.data.DataLoader;
+	import cs448b.as3.data.PlayerData;
 	import cs448b.as3.ui.BarChart;
 	import cs448b.as3.ui.Controls;
 	import cs448b.as3.ui.SoccerField;
@@ -18,6 +19,7 @@ package {
 		private var soccerField:SoccerField;
 		private var barChart:BarChart
 		private var controls:Controls;
+		private var pData:PlayerData;
 		/**
 		 * Constructor
 		 */
@@ -52,6 +54,8 @@ package {
 
 			controls.addControlListener(soccerField);
 			controls.addControlListener(barChart);
+			
+			pData = new PlayerData();
 		}
 		
 		/**
@@ -85,7 +89,9 @@ package {
 		 */
 		public function handlePlayerLoaded( evt:Event ):void
 		{
-			controls.registerData(dataLoader.playerData);
+			pData.registerData(dataLoader.playerData);
+			controls.updatePlayerData(pData);
+			soccerField.updatePlayerData(pData);
 		}
 	}
 }

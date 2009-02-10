@@ -5,8 +5,11 @@ package cs448b.as3.ui
 	import flare.util.palette.ColorPalette;
 	import flare.util.palette.SizePalette;
 	import flare.vis.Visualization;
+	import flare.vis.controls.TooltipControl;
 	import flare.vis.data.Data;
 	import flare.vis.data.DataSprite;
+	import flare.vis.data.NodeSprite;
+	import flare.vis.events.TooltipEvent;
 	import flare.vis.operator.encoder.ColorEncoder;
 	import flare.vis.operator.encoder.SizeEncoder;
 	import flare.vis.operator.filter.VisibilityFilter;
@@ -15,8 +18,11 @@ package cs448b.as3.ui
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	
+	import cs448b.as3.data.PlayerData;
+		
 	public class SoccerField extends Sprite implements ControlListener
 	{
+		private var pData:PlayerData;
 		private var fieldWidth:Number = 385;
 		private var fieldHeight:Number = 265;
 		private var offset:Number = 5;
@@ -164,9 +170,39 @@ package cs448b.as3.ui
 			// add filters
 			vis.operators.add(new VisibilityFilter(theFilter));
 //            vis.operators[3].immediate = true; // filter immediately!
+
+			// add tooltips
+			vis.controls.add(new TooltipControl(NodeSprite, null,
+			    // update on both roll-over and mouse-move
+				updateTooltip, updateTooltip));
             			
             vis.update();
 		}
+	import flare.util.Strings;
+	import flare.display.TextSprite;
+
+		private function updateTooltip(e:TooltipEvent):void
+		{
+			// get current year value from axes, and map to data
+			var x:Number = Number(vis.xyAxes.xAxis.value(vis.mouseX, vis.mouseY));
+			var y:Number = Number(vis.xyAxes.yAxis.value(vis.mouseX, vis.mouseY));			
+			//var year:String = (10 * Math.round(yr/10)).toString();
+			//var def:Boolean = (e.node.data[year] != undefined);
+			var shotType:String;
+			if (e.node.data.ShotType == "g") shotType = "Goal";
+			else if (e.node.data.ShotType == "o") shotType = "Shot on Goal";
+			else shotType = "Shot";
+			
+			TextSprite(e.tooltip).htmlText = Strings.format(
+				"<b>{0}</b><br/>{1} in Round {2}, {3} min.",
+				shotType, pData.getLastNameWithNumber(e.node.data.Player),
+				e.node.data.Round, e.node.data.Time);			
+//			TextSprite(e.tooltip).htmlText = Strings.format(
+//				"<b>{0}</b><br/>{1} in {2}: "+(def?"{3:0.###%}":"<i>{3}</i>"),
+//				e.node.data.ShotType, e.node.data.Number,
+//				e.node.data.Round, (def ? e.node.data.Time : "Missing Data"));
+		}
+
 		
 // Visability filter functions
 		private function theFilter(d:DataSprite):Boolean
@@ -212,7 +248,13 @@ package cs448b.as3.ui
 			else if(_timeCurrent >= d.data.Time) return true;
 			else return false;
 		}
-		
+
+		public function updatePlayerData(plData:PlayerData):void 
+		{
+			pData = null;
+			pData = plData;
+		}
+				
 // Visability value set functions
 		public function gameType(gt:String):void
 		{
