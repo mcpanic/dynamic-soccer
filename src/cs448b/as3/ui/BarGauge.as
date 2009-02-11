@@ -14,6 +14,10 @@ package cs448b.as3.ui
 		
 		private var _data:Data;
 		
+		private var _goalSum:Number = 0;
+		private var _sogSum:Number = 0;
+		private var _shotSum:Number = 0;
+		
 		// filter values
 		private var _gameType:String = "All";
 		private var _roundNo:Number = 1;
@@ -124,37 +128,45 @@ package cs448b.as3.ui
 		
 		private function update():void
 		{
-			//TODO: update length here
 			if(_data != null)
 			{
-				var goal:Number = 0;
-				var sog:Number = 0;
-				var shot:Number = 0;
-				
-				_data.visit(function (ds:DataSprite):void{
-					// TODO: sum values here
-					if( theFilter(ds, 0) ) goal++;
-					if( theFilter(ds, 1) ) sog++;
-					if( theFilter(ds, 2) ) shot++;
-				});
-				 	
-				if(updateIm) shotRect.width = gaugeWidth*shot/_maxValue;
-				else 
-				{
-					if(_shotType == 2)new Tween(shotRect, transTime, {width:gaugeWidth*shot/_maxValue}).play();
-					else new Tween(shotRect, transTime, {width:0}).play();
-				}
-				
-				if(updateIm) sogRect.width = gaugeWidth*sog/_maxValue;
-				else
-				{
-					if(_shotType != 0) new Tween(sogRect, transTime, {width:gaugeWidth*sog/_maxValue}).play();
-					else new Tween(sogRect, transTime, {width:0}).play();
-				}
-				
-				if(updateIm) goalRect.width = gaugeWidth*goal/_maxValue;
-				else new Tween(goalRect, transTime, {width:gaugeWidth*goal/_maxValue}).play();
+				updateSumValues();	 	
+				updateBars();	
 			}
+		}
+		
+		private function updateSumValues():void
+		{
+			_goalSum = 0;
+			_sogSum = 0;
+			_shotSum = 0;
+			
+			_data.visit(function (ds:DataSprite):void{
+				// sum values here
+				if( theFilter(ds, 0) ) _goalSum++;
+				if( theFilter(ds, 1) ) _sogSum++;
+				if( theFilter(ds, 2) ) _shotSum++;
+			});
+		}
+		
+		private function updateBars():void
+		{
+			if(updateIm) shotRect.width = gaugeWidth*_shotSum/_maxValue;
+			else 
+			{
+				if(_shotType == 2)new Tween(shotRect, transTime, {width:gaugeWidth*_shotSum/_maxValue}).play();
+				else new Tween(shotRect, transTime, {width:0}).play();
+			}
+			
+			if(updateIm) sogRect.width = gaugeWidth*_sogSum/_maxValue;
+			else
+			{
+				if(_shotType != 0) new Tween(sogRect, transTime, {width:gaugeWidth*_sogSum/_maxValue}).play();
+				else new Tween(sogRect, transTime, {width:0}).play();
+			}
+			
+			if(updateIm) goalRect.width = gaugeWidth*_goalSum/_maxValue;
+			else new Tween(goalRect, transTime, {width:gaugeWidth*_goalSum/_maxValue}).play();
 		}
 		
 		private function theFilter(d:DataSprite, st:Number):Boolean
