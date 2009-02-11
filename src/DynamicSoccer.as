@@ -72,7 +72,7 @@ package {
 			addChild(controls);
 			
 			barChart.x = 100;
-			barChart.y = 450;
+			barChart.y = 560;
 			addChild(barChart);
 		}
 

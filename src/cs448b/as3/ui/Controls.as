@@ -235,7 +235,8 @@ package cs448b.as3.ui
 				{label:"Away", color:0xff88ff88},
 				{label:"Single", color:0xffff8888}
 			]);
-			_gameType.orientation = Orientation.LEFT_TO_RIGHT;
+			_gameType.orientation = Orientation.TOP_TO_BOTTOM;
+			//_gameType.orientation = Orientation.LEFT_TO_RIGHT;
 			_gameType.labelTextFormat = _legendFormat;
 			_gameType.margin = 3;
 			_gameType.setItemProperties({buttonMode:true, alpha:0.4});
@@ -337,7 +338,8 @@ package cs448b.as3.ui
 				{label:"Shots on Goal",   color:0xff8888ff},
 				{label:"Shots", color:0xff88ff88}
 			]);
-			_shotType.orientation = Orientation.LEFT_TO_RIGHT;
+			_shotType.orientation = Orientation.TOP_TO_BOTTOM;
+//			_shotType.orientation = Orientation.LEFT_TO_RIGHT;
 			_shotType.labelTextFormat = _legendFormat;
 			_shotType.margin = 3;
 			_shotType.setItemProperties({buttonMode:true, alpha:0.4});
@@ -369,17 +371,19 @@ package cs448b.as3.ui
 			}).attach(_shotType);
 			            	
 		}
-        		
+        import fl.controls.SliderDirection;
+		
 		private var _speedSlider:Slider;
 		private var _speedTitleText:TextSprite;
 		private var _speedText:TextSprite;
-		
+		private var _speedText2:TextSprite;
 		private var _playSpeed:Number = 200;
 				
 		private function addPlaybackSpeed():void
 		{
 			_speedSlider = new Slider();
             _speedSlider.addEventListener( SliderEvent.CHANGE, showSpeedValue );
+            _speedSlider.direction = SliderDirection.VERTICAL;
             _speedSlider.value = 2;
             this.addChild( _speedSlider );
 
@@ -389,13 +393,20 @@ package cs448b.as3.ui
             
             _speedText = new TextSprite("", _textFormat);
             _speedText.horizontalAnchor = TextSprite.CENTER;
-            _speedText.text = "Slowest   Slow    Normal    Fast    Fastest";
-            this.addChild( _speedText );			
+            _speedText.text = "Fast";
+            this.addChild( _speedText );
+            
+            _speedText2 = new TextSprite("", _textFormat);
+            _speedText2.horizontalAnchor = TextSprite.CENTER;
+            _speedText2.text = "Slow";
+            this.addChild( _speedText2 );	            			
 		}
 		
         private function showSpeedValue( sliderEvent:SliderEvent ):void
         {
-        	_playSpeed = 1000 - sliderEvent.value * 200;
+        	_playSpeed = 600 - sliderEvent.value * sliderEvent.value * 30;
+		    clearInterval(curInterval);
+		    curInterval = setInterval(playMovie, _playSpeed);	 
         }
         
 		import flash.text.TextField;
@@ -421,7 +432,7 @@ package cs448b.as3.ui
             
             _timeText = new TextSprite("", _textFormat);
             _timeText.horizontalAnchor = TextSprite.CENTER;
-            _timeText.text = "0                  15                  30                  45                  60                  75                  90";
+            _timeText.text = " 0                 15                  30                  45                  60                  75                 90";
             this.addChild( _timeText );		
 
             _timeCurrent = new TextField();
@@ -491,80 +502,86 @@ package cs448b.as3.ui
 		public function layout():void
 		{
 			if (_season) {
-				_season.x = 10;
+				_season.x = 260;
 				_season.y = 10; 
 			}			
 			if (_team) {
-				_team.x = 100;
+				_team.x = 350;
 				_team.y = 10; 
 			}	
 			if (_homeText) {
-				_homeText.x = 370;
-				_homeText.y = 330;
+				_homeText.x = 380;//480;
+				_homeText.y = 60;
 			}	
 			if (_awayText) {
-				_awayText.x = 180;
-				_awayText.y = 330; 
+				_awayText.x = 280;//180;
+				_awayText.y = 60; 
 			}							
-			var x:Number = 550;
+			var x:Number = 670;
 			var y:Number = 70;
 			if (_gameType) {
 	            _gameType.x = x;
-	            _gameType.y = y+25;
+	            _gameType.y = y+20;
 			}	
 			if (_roundSelect) {
-				_roundSelect.move(x+130, y+50);					
+				_roundSelect.move(x, y+100);					
 			}
 			if (_roundTitleText) {
-	            _roundTitleText.x = x-20;
+	            _roundTitleText.x = x-10;
 	            _roundTitleText.y = y;				
 			}	
 			if (_roundText) {				
 	            _roundText.x = x;
-	            _roundText.y = y+53;				
+	            _roundText.y = y-50;				
 			}	
 			if (_roundText2) {				
 	            _roundText2.x = x;
-	            _roundText2.y = y+80;				
+	            _roundText2.y = y-30;				
 			}									
-			y = 230;	
+			y = y+170;	
 
 			if (_shotType) {
 	            _shotType.x = x;
 	            _shotType.y = y;
 			}	
 			if (_shotTitleText) {
-	            _shotTitleText.x = x-20;
-	            _shotTitleText.y = y-30;
+	            _shotTitleText.x = x-10;
+	            _shotTitleText.y = y-20;
 			}			
 
-			y = 300;
+			y = y + 100;
 			if (_speedSlider) {
-				_speedSlider.x = x;
+				_speedSlider.x = x+60;
 				_speedSlider.y = y;
-				_speedSlider.setSize(200, 30);
+				_speedSlider.setSize(10, 80);
 				// 0: Slowest, 1: Slow, 2: Normal, 3: Fast, 4: Fastest
+				_speedSlider.tickInterval = 1;
 				_speedSlider.minimum = 0;
 				_speedSlider.maximum = 4;
 			}
 			if (_speedTitleText) {
-	            _speedTitleText.x = x-20;
+	            _speedTitleText.x = x-10;
 	            _speedTitleText.y = y-30;
 			}				
 			if (_speedText) {
-	            _speedText.x = x+100;
-	            _speedText.y = y+30;
+	            _speedText.x = x+90;
+	            _speedText.y = y;
 			}	
-			
+			if (_speedText2) {
+	            _speedText2.x = x+90;
+	            _speedText2.y = y+70;
+			}
+						
 			x = 100;
-			y = 400;	
+			y = 510;	
 			if (_timeSlider) {
 				_timeSlider.x = x;
 				_timeSlider.y = y;
 				_timeSlider.setSize(500, 30);
+				_timeSlider.tickInterval = 15;
 			}
 			if (_timeTitleText) {
-	            _timeTitleText.x = x-20;
+	            _timeTitleText.x = x-10;
 	            _timeTitleText.y = y-30;
 			}				
 			if (_timeText) {
@@ -584,24 +601,25 @@ package cs448b.as3.ui
 			if (_playButton) {
 	            _playButton.x = x+530;		
 	            _playButton.y = y-10;		
+	            _playButton.width = 50;
 			}
 			x = 800;
-			y = 650;	
+			y = 70;	
 			if (_playerTitleText) {
             	_playerTitleText.x = x;
-            	_playerTitleText.y = 70;
+            	_playerTitleText.y = y;
 			}				
 			if (_playerSelect) {
             	_playerSelect.x = x+20;
-            	_playerSelect.y = y;
+            	_playerSelect.y = y+20;
 			}	
 			if (_playerBox) {
 				for (var i:Number=0; i<totalPlayers; i++)
 				{	
 					_playerBox[i].x = x;
-					_playerBox[i].y = i*20+100;	
+					_playerBox[i].y = i*20+y+40;	
 					_playerName[i].x = x+50;
-					_playerName[i].y = i*20+103;			
+					_playerName[i].y = i*20+y+43;			
 				}
 			}			
 		}
