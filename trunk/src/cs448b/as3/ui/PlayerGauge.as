@@ -2,7 +2,6 @@ package cs448b.as3.ui
 {
 	import flare.animate.Transitioner;
 	import flare.data.DataSet;
-	import flare.display.TextSprite;
 	import flare.scale.ScaleType;
 	import flare.util.Shapes;
 	import flare.vis.Visualization;
@@ -15,86 +14,89 @@ package cs448b.as3.ui
 	
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
-	import flash.text.TextFormat;
 	
-	public class BarChart extends Sprite implements ControlListener
+	public class PlayerGauge extends Sprite implements ControlListener
 	{
-		private var chartWidth:Number = 500;
-		private var chartHeight:Number = 100;
+		private var gaugeWidth:Number = 100;
+		private var gaugeHeight:Number = 540;
 		
 		private var transTime:Number = 0.5;
 		
 		private var vis:Visualization = null;
 		
-		private var textFormat:TextFormat;
-		private var xLabel:TextSprite;
-		private var yLabel:TextSprite;
-		
 		// filter values
 		private var _gameType:String = "All";
 		private var _roundNo:Number = 1;
-		private var _playerArray:Array = null;
+		private var _playerNo:Number = -1; // Ronaldo
 		private var _shotType:Number = 2;
 		private var _timeCurrent:Number = 90;
 		private var updateIm:Boolean = false;
 		
-		public function BarChart()
+		/**
+		 * Constructor
+		 */
+		public function PlayerGauge(pn:Number = -1)
 		{
-			this.graphics.beginFill(0xffffff, 1 );   // beginFill( color, alpha )
-            this.graphics.drawRect( 0, 0, chartWidth, chartHeight);    // drawRect( left, top, width, height )
-            this.graphics.endFill();
-            
+			_playerNo = pn;
+			
 			initComponents();
 			buildSprite();
 		}
 
 		public function initComponents():void
 		{
-			initVis();
-			
-			textFormat = new TextFormat("Verdana,Tahoma,Arial",12,0,true);
-			xLabel = new TextSprite("Minutes", textFormat);
-			yLabel = new TextSprite("Shot#", textFormat);
+			initVis();			
 		}
 		
 		public function buildSprite():void
 		{
-			addChild(vis);
-			
-			xLabel.x = chartWidth/2 - 50;
-			xLabel.y = chartHeight + 30;
-			addChild(xLabel);
-			
-			yLabel.x = -yLabel.width-30;
-			yLabel.y = chartHeight/2;			
-			addChild(yLabel);
+			addChild(vis);			
 		}
 		
 		public function initVis(d:Data = null):void
 		{
 			vis = new Visualization(d);
-			vis.bounds = new Rectangle(0, 0, chartWidth, chartHeight);
+			vis.bounds = new Rectangle(0, 0, gaugeWidth, gaugeHeight);
 		}
 		
 		public function registerData(ds:DataSet):void//d:Data):void
 		{			
-			vis.data = Data.fromDataSet(ds); 
+			vis.data = Data.fromDataSet(ds);//d; 
 			
 			vis.operators.add(new VisibilityFilter(theFilter));
 			vis.operators[0].immediate = true; // filter immediately!
 			
 			vis.operators.add(new SortOperator(["-visible","data.ShotType"]));
 			
-			vis.operators.add(new AxisLayout("data.TimeBin", "data.ShotNum", false, true));
+			vis.operators.add(new AxisLayout("data.ShotNum", "data.Player", true, false));
 			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
                 "fillColor", ScaleType.CATEGORIES, LegendColors.SHOT_PALETTE));
+                
 			vis.data.nodes.setProperties({
-				shape: Shapes.VERTICAL_BAR,
-				lineAlpha: 0, size: 10
+				shape: Shapes.HORIZONTAL_BAR,
+				lineAlpha: 0, size: 1.5
 				});
+				
+			// set axis values 			
+			vis.xyAxes.yReverse = true;
+				
+			vis.xyAxes.xAxis.showLines = false;
+			vis.xyAxes.xAxis.showLabels = false;
+//			vis.xyAxes.xAxis.axisScale.max = gaugeWidth;
+//			vis.xyAxes.xAxis.axisScale.min = 0;
+//			vis.xyAxes.xAxis.axisScale.flush = true;
+			
+			vis.xyAxes.yAxis.showLines = false;
+//			vis.xyAxes.yAxis.showLabels = false;
+//			vis.xyAxes.yAxis.axisScale.max = gaugeHeight;
+//			vis.xyAxes.yAxis.axisScale.min = 0;
+//			vis.xyAxes.yAxis.axisScale.flush = true;
 			
  			vis.update();
 		}
+		
+		public function get playerNumber():Number{ return _playerNo; }
+		public function set playerNumber(pn:Number):void{ _playerNo = pn; }
 		
 		private function getTypeString(t:Number):String
 		{
@@ -119,16 +121,9 @@ package cs448b.as3.ui
 		
 		private function playerFilter(d:DataSprite):Boolean
 		{
-			if(_playerArray == null) return true;
-			else
-			{
-				for(var i:Number = 0; i < _playerArray.length; i++)
-				{
-					if(_playerArray[i] as Number == d.data.Player) return true;
-				}
-			}
-			
-			return false;
+			if(_playerNo < 0) return true;
+			else if(_playerNo == d.data.Player) return true;			
+			else return false;
 		}
 		
 		private function goalFilter(d:DataSprite):Boolean
@@ -146,6 +141,7 @@ package cs448b.as3.ui
 			else return false;
 		}
 		
+		// ControlListener
 		// Visability value set functions
 		public function gameType(gt:String):void
 		{
@@ -162,8 +158,7 @@ package cs448b.as3.ui
 		
 		public function playerNo(pnArray:Array):void
 		{
-			_playerArray = pnArray;			
-			vis.update(new Transitioner(transTime)).play();
+			// do nothing for player change
 		}
 		
 		public function shotType(gt:Number):void
@@ -171,7 +166,7 @@ package cs448b.as3.ui
 			_shotType = gt;			
 			
 			var al:AxisLayout = vis.operators[2] as AxisLayout;
-			al.yField = "data."+getTypeString(gt);
+			al.xField = "data."+getTypeString(gt);
 			vis.update(new Transitioner(transTime)).play();
 		}
 		

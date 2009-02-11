@@ -3,8 +3,8 @@ package cs448b.as3.ui
 	import cs448b.as3.data.PlayerData;
 	
 	import flare.animate.Transitioner;
+	import flare.data.DataSet;
 	import flare.scale.ScaleType;
-	import flare.util.palette.SizePalette;
 	import flare.vis.Visualization;
 	import flare.vis.controls.TooltipControl;
 	import flare.vis.data.Data;
@@ -12,7 +12,6 @@ package cs448b.as3.ui
 	import flare.vis.data.NodeSprite;
 	import flare.vis.events.TooltipEvent;
 	import flare.vis.operator.encoder.ColorEncoder;
-	import flare.vis.operator.encoder.SizeEncoder;
 	import flare.vis.operator.filter.VisibilityFilter;
 	import flare.vis.operator.layout.AxisLayout;
 	
@@ -147,9 +146,9 @@ package cs448b.as3.ui
 		/**
 		 * Draws the given points
 		 */
-		public function registerData(d:Data):void
+		public function registerData(ds:DataSet):void//d:Data):void
 		{
-			vis.data = d;
+			vis.data = Data.fromDataSet(ds);//d;
 
 			// add filters
 			vis.operators.add(new VisibilityFilter(theFilter));
@@ -157,10 +156,11 @@ package cs448b.as3.ui
 
 			vis.operators.add(new AxisLayout("data.X", "data.Y"));
 			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
-                "lineColor", ScaleType.CATEGORIES, LegendColors.SHOT_PALETTE));
-			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
+                "fillColor", ScaleType.CATEGORIES, LegendColors.SHOT_PALETTE));
 			
-            vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
+            vis.data.nodes.setProperties({
+            	lineAlpha: 0, size: 0.5
+            	});
 
 			// set axis values 			
 			vis.xyAxes.xAxis.showLines = false;

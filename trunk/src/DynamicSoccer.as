@@ -3,8 +3,11 @@ package {
 	import cs448b.as3.data.MatchData;
 	import cs448b.as3.data.PlayerData;
 	import cs448b.as3.ui.BarChart;
+	import cs448b.as3.ui.BarGauge;
 	import cs448b.as3.ui.Controls;
 	import cs448b.as3.ui.SoccerField;
+	
+	import flare.vis.data.Data;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -15,9 +18,14 @@ package {
 	
 	public class DynamicSoccer extends Sprite
 	{
+		private var data:Data;
+		
 		private var dataLoader:DataLoader;		
 		private var soccerField:SoccerField;
-		private var barChart:BarChart
+		private var barChart:BarChart;
+		private var pgArray:Array;
+//		private var playerGauge7:PlayerGauge;
+
 		private var controls:Controls;
 		private var pData:PlayerData;
 		private var mData:MatchData;
@@ -50,9 +58,17 @@ package {
 		{
 			soccerField = new SoccerField();
 			barChart = new BarChart();
+			
+			initGauges();
+//			playerGauge7 = new PlayerGauge();			
+			
 			controls = new Controls();
+			
 			controls.addControlListener(soccerField);
 			controls.addControlListener(barChart);
+//			controls.addControlListener(playerGauge7);
+			
+			addGaugeListeners();
 			
 			pData = new PlayerData();
 			mData = new MatchData();
@@ -74,6 +90,11 @@ package {
 			barChart.x = 100;
 			barChart.y = 560;
 			addChild(barChart);
+			
+			addGaugesAsChild();
+//			playerGauge7.x = 1000;
+//			playerGauge7.y = 110;
+//			addChild(playerGauge7);
 		}
 
 		/**
@@ -81,8 +102,14 @@ package {
 		 */
 		public function handleLoaded( evt:Event ):void
 		{
-			barChart.registerData(dataLoader.data2);
-			soccerField.registerData(dataLoader.data);
+			barChart.registerData(dataLoader.dataSet);
+			soccerField.registerData(dataLoader.dataSet);
+//			playerGauge7.registerData(dataLoader.dataSet);
+			registerDataGauges();
+
+//			barChart.registerData(dataLoader.data2);
+//			soccerField.registerData(dataLoader.data);
+//			playerGauge.registerData(dataLoader.data2);
 //			controls.registerData(dataLoader.playerData);
 		}
 		
@@ -94,6 +121,8 @@ package {
 			pData.registerData(dataLoader.playerData);
 			controls.updatePlayerData(pData);
 			soccerField.updatePlayerData(pData);
+			
+			setPlayerNo();
 		}
 		/**
 		 * Handles the match data loaded event
@@ -102,6 +131,57 @@ package {
 		{
 			mData.registerData(dataLoader.matchData);
 			controls.updateMatchData(mData);
-		}		
+		}	
+		
+		public function initGauges():void
+		{
+			pgArray = new Array();
+			
+			for(var i:Number = 0; i < PlayerData.totalPlayers; i++)
+			{
+				pgArray.push(new BarGauge());
+			}
+		}
+		
+		public function addGaugeListeners():void
+		{
+			for(var i:Number = 0; i < PlayerData.totalPlayers; i++)
+			{
+				var pg:BarGauge = pgArray[i] as BarGauge;
+				if(pg != null) controls.addControlListener(pg);
+			}
+		}
+		
+		public function addGaugesAsChild():void
+		{
+			for(var i:Number = 0; i < PlayerData.totalPlayers; i++)
+			{
+				var pg:BarGauge = pgArray[i] as BarGauge;
+				
+				pg.x = 970;
+				pg.y = 110 + 20*i;
+				addChild(pg);
+			}
+		}
+		
+		public function registerDataGauges():void
+		{
+			data = Data.fromDataSet(dataLoader.dataSet);
+			for(var i:Number = 0; i < PlayerData.totalPlayers; i++)
+			{
+				var pg:BarGauge = pgArray[i] as BarGauge;
+				
+				pg.registerData(data);
+			}
+		}
+		
+		public function setPlayerNo():void
+		{
+			for(var i:Number = 0; i < PlayerData.totalPlayers; i++)
+			{
+				var pg:BarGauge = pgArray[i] as BarGauge;
+				pg.playerNumber = pData.getPlayerNumber(i);
+			}
+		}
 	}
 }
