@@ -1,5 +1,6 @@
 package cs448b.as3.ui
 {
+	import flare.animate.Tween;
 	import flare.vis.data.Data;
 	import flare.vis.data.DataSprite;
 	
@@ -24,6 +25,8 @@ package cs448b.as3.ui
 		private var _maxValue:Number = 200;
 		private var gaugeWidth:Number = 50;
 		private var gaugeHeight:Number = 20;
+		
+		private var transTime:Number = 0.5;
 		
 		public function BarGauge(pn:Number = -1)
 		{	
@@ -116,6 +119,7 @@ package cs448b.as3.ui
 		public function setImmediate(im:Boolean):void
 		{
 			// there is no immediate flag
+			updateIm = im;
 		}
 		
 		private function update():void
@@ -134,9 +138,22 @@ package cs448b.as3.ui
 					if( theFilter(ds, 2) ) shot++;
 				});
 				 	
-				shotRect.width = gaugeWidth*shot/_maxValue;
-				sogRect.width = gaugeWidth*sog/_maxValue;
-				goalRect.width = gaugeWidth*goal/_maxValue;
+				if(updateIm) shotRect.width = gaugeWidth*shot/_maxValue;
+				else 
+				{
+					if(_shotType == 2)new Tween(shotRect, transTime, {width:gaugeWidth*shot/_maxValue}).play();
+					else new Tween(shotRect, transTime, {width:0}).play();
+				}
+				
+				if(updateIm) sogRect.width = gaugeWidth*sog/_maxValue;
+				else
+				{
+					if(_shotType != 0) new Tween(sogRect, transTime, {width:gaugeWidth*sog/_maxValue}).play();
+					else new Tween(sogRect, transTime, {width:0}).play();
+				}
+				
+				if(updateIm) goalRect.width = gaugeWidth*goal/_maxValue;
+				else new Tween(goalRect, transTime, {width:gaugeWidth*goal/_maxValue}).play();
 			}
 		}
 		
