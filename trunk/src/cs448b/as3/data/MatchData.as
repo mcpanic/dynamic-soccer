@@ -4,13 +4,13 @@ package cs448b.as3.data
 	import flare.vis.data.DataSprite;			
 	public class MatchData
 	{
-		private var totalRounds:Number;
 		private var matchArray:Array;
+		
+		public static var totalRounds:Number = 38;
 		
 		public function MatchData()
 		{
-			totalRounds = 38;
-
+			matchArray = null;
 		}
 		public function registerData(d:Data):void
 		{
