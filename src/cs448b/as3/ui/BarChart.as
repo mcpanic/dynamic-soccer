@@ -89,7 +89,7 @@ package cs448b.as3.ui
 			
 			vis.operators.add(new AxisLayout("data.TimeBin", "data.ShotNum", false, true));
 			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
-                "fillColor", ScaleType.CATEGORIES));
+                "fillColor", ScaleType.CATEGORIES, LegendColors.SHOT_PALETTE));
 			vis.data.nodes.setProperties({
 				fillColor: 0xff0abcde,
 				shape: Shapes.VERTICAL_BAR,

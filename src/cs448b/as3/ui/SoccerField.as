@@ -4,7 +4,6 @@ package cs448b.as3.ui
 	
 	import flare.animate.Transitioner;
 	import flare.scale.ScaleType;
-	import flare.util.palette.ColorPalette;
 	import flare.util.palette.SizePalette;
 	import flare.vis.Visualization;
 	import flare.vis.controls.TooltipControl;
@@ -152,15 +151,13 @@ package cs448b.as3.ui
 		{
 			vis.data = d;
 
-
 			// add filters
 			vis.operators.add(new VisibilityFilter(theFilter));
 //            vis.operators[3].immediate = true; // filter immediately!
 
 			vis.operators.add(new AxisLayout("data.X", "data.Y"));
 			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
-                "lineColor", ScaleType.CATEGORIES, 
-                new ColorPalette([0xffd62728, 0xafaec7e8, 0xafaaaaaa])));
+                "lineColor", ScaleType.CATEGORIES, LegendColors.SHOT_PALETTE));
 			vis.operators.add(new SizeEncoder("data", Data.NODES, new SizePalette(0.05, 0.1)));
 			
             vis.data.nodes.setProperties({fillColor:0, lineWidth:3, size:1});
