@@ -10,8 +10,9 @@ package cs448b.as3.data
 	public class DataLoader// extends Sprite
 	{		
 		private var dataAddress:String;
-		private var _data:Data;
-		private var _data2:Data;
+		private var _dataSet:DataSet;
+//		private var _data:Data;
+//		private var _data2:Data;
 		
 		private var matchAddress:String;
 		private var _matchData:Data;
@@ -34,20 +35,28 @@ package cs448b.as3.data
 		}
 		
 		/**
-		 * Returns the goal data.
+		 * Returns the data set.
 		 */
-		public function get data():Data
+		public function get dataSet():DataSet
 		{
-			return _data;
+			return _dataSet;
 		}
 		
-		/**
-		 * Returns the goal data.
-		 */
-		public function get data2():Data
-		{
-			return _data2;
-		}
+//		/**
+//		 * Returns the goal data.
+//		 */
+//		public function get data():Data
+//		{
+//			return _data;
+//		}
+//		
+//		/**
+//		 * Returns the goal data.
+//		 */
+//		public function get data2():Data
+//		{
+//			return _data2;
+//		}
 		
 		/**
 		 * Returns the player data.
@@ -77,11 +86,11 @@ package cs448b.as3.data
             loader.addEventListener( Event.COMPLETE, 
             	function( evt:Event ):void
             	{
-	                var dataSet:DataSet = loader.data as DataSet;
+	                _dataSet = loader.data as DataSet;
 	                
 	                // Use default function to import data
-	                _data = Data.fromDataSet( dataSet );
-	                _data2 = Data.fromDataSet( dataSet );
+//	                _data = Data.fromDataSet( dataSet );
+//	                _data2 = Data.fromDataSet( dataSet );
            
 					//testData();
 					
