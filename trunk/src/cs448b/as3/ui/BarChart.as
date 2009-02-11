@@ -19,7 +19,7 @@ package cs448b.as3.ui
 	public class BarChart extends Sprite implements ControlListener
 	{
 		private var chartWidth:Number = 500;
-		private var chartHeight:Number = 200;
+		private var chartHeight:Number = 100;
 		
 		private var transTime:Number = 0.5;
 		
