@@ -146,6 +146,11 @@ package cs448b.as3.ui
 		{
 			vis.data = d;
 
+
+			// add filters
+			vis.operators.add(new VisibilityFilter(theFilter));
+//            vis.operators[3].immediate = true; // filter immediately!
+
 			vis.operators.add(new AxisLayout("data.X", "data.Y"));
 			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
                 "lineColor", ScaleType.CATEGORIES, 
@@ -166,10 +171,6 @@ package cs448b.as3.ui
 			vis.xyAxes.yAxis.axisScale.min = 0;
 			vis.xyAxes.yAxis.axisScale.flush = true;
 			vis.xyAxes.yAxis.showLabels = false;
-
-			// add filters
-			vis.operators.add(new VisibilityFilter(theFilter));
-//            vis.operators[3].immediate = true; // filter immediately!
 
 			// add tooltips
 			vis.controls.add(new TooltipControl(NodeSprite, null,
@@ -288,7 +289,7 @@ package cs448b.as3.ui
 				
 		public function setImmediate(im:Boolean):void
 		{
-			vis.operators[3].immediate = im; // filter immediately!
+			vis.operators[0].immediate = im; // filter immediately!
 		}
 	}
 
