@@ -63,7 +63,7 @@ package cs448b.as3.ui
 		}
 		
 		public function get playerNumber():Number{ return _playerNo; }
-		public function set playerNumber(pn:Number):void{ _playerNo = pn; }
+		public function set playerNumber(pn:Number):void{ _playerNo = pn; update()}
 		
 		public function registerData(d:Data):void
 		{			
