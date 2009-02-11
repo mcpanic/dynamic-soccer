@@ -39,8 +39,8 @@ package cs448b.as3.ui
 		private var _controlListener:Array = new Array(2);
 
 		// Constants
-		private var totalPlayers:Number = 27;
-		private var totalRounds:Number = 38;
+		public static var totalPlayers:Number = 27;
+		public static var totalRounds:Number = 38;
 		// Data objects
 		private var pData:PlayerData;
 		private var mData:MatchData;
