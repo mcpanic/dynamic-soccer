@@ -65,6 +65,8 @@ package {
 		{
 			soccerField.x = 100;
 			soccerField.y = 50;
+			soccerField.scaleX = 1.5;
+			soccerField.scaleY = 1.5;
 			addChild(soccerField);
 			
 			addChild(controls);
