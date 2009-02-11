@@ -63,7 +63,7 @@ package {
 		 */
 		public function buildSprite():void
 		{
-			soccerField.x = 100;
+			soccerField.x = 50;
 			soccerField.y = 50;
 			soccerField.scaleX = 1.5;
 			soccerField.scaleY = 1.5;
