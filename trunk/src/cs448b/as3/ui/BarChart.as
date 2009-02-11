@@ -7,6 +7,7 @@ package cs448b.as3.ui
 	import flare.vis.Visualization;
 	import flare.vis.data.Data;
 	import flare.vis.data.DataSprite;
+	import flare.vis.operator.SortOperator;
 	import flare.vis.operator.encoder.ColorEncoder;
 	import flare.vis.operator.filter.VisibilityFilter;
 	import flare.vis.operator.layout.AxisLayout;
@@ -22,6 +23,8 @@ package cs448b.as3.ui
 		
 		private var transTime:Number = 0.5;
 		
+		private var data:Data;
+		
 		private var vis:Visualization = null;
 		
 		private var textFormat:TextFormat;
@@ -34,6 +37,7 @@ package cs448b.as3.ui
 		private var _playerArray:Array = null;
 		private var _shotType:Number = 2;
 		private var _timeCurrent:Number = 90;
+		private var updateIm:Boolean = false;
 		
 		public function BarChart()
 		{
@@ -75,27 +79,31 @@ package cs448b.as3.ui
 		
 		public function registerData(d:Data):void
 		{			
+			data = d;
 			vis.data = d; 
 			
-			vis.operators.add(new AxisLayout("data.TimeBin", "data.GoalNum", false, true));
-			vis.operators.add(new ColorEncoder("data.GoalNum", Data.NODES, "fillColor", ScaleType.CATEGORIES));
-			vis.data.nodes.setProperties({
-				shape: Shapes.VERTICAL_BAR,
-				lineAlpha: 0,
-				size: 10
-			});
-			
-			// add filters
 			vis.operators.add(new VisibilityFilter(theFilter));
+			vis.operators[0].immediate = true; // filter immediately!
+			
+			vis.operators.add(new SortOperator(["-visible","data.ShotType"]));
+			
+			vis.operators.add(new AxisLayout("data.TimeBin", "data.ShotNum", false, true));
+			vis.operators.add(new ColorEncoder("data.ShotType", Data.NODES,
+                "fillColor", ScaleType.CATEGORIES));
+			vis.data.nodes.setProperties({
+				fillColor: 0xff0abcde,
+				shape: Shapes.VERTICAL_BAR,
+				lineAlpha: 0, size: 10
+			});
 			
  			vis.update();
 		}
 		
 		private function getTypeString(t:Number):String
 		{
-			if(t == 0) return "data.GoalNum";
-			else if(t == 1) return "data.SogNum";
-			else return "data.ShotNum";
+			if(t == 0) return "GoalNum";
+			else if(t == 1) return "SogNum";
+			else return "ShotNum";
 		}
 		
 		private function theFilter(d:DataSprite):Boolean
@@ -105,7 +113,6 @@ package cs448b.as3.ui
 		
 		private function gameFilter(d:DataSprite):Boolean
 		{
-			//trace("gameFilter()");
 			if(_gameType == "All") return true;
 			else if(_gameType == "Home" && d.data.HomeAway == "Home") return true;
 			else if(_gameType == "Away" && d.data.HomeAway == "Away") return true;
@@ -151,7 +158,8 @@ package cs448b.as3.ui
 		
 		public function roundNo(rn:Number):void
 		{
-			_roundNo = rn;			
+			_roundNo = rn;
+						
 			vis.update(new Transitioner(transTime)).play();
 		}
 		
@@ -163,23 +171,25 @@ package cs448b.as3.ui
 		
 		public function shotType(gt:Number):void
 		{
-			_shotType = gt;			 
+			_shotType = gt;			
 			
-			var al:AxisLayout =  vis.operators[0] as AxisLayout;
-			al.yField = getTypeString(gt);
-			
+			var al:AxisLayout = vis.operators[2] as AxisLayout;
+			al.yField = "data."+getTypeString(gt);
 			vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function timeCurrent(tc:Number):void
 		{
 			_timeCurrent = tc;
-			vis.update(new Transitioner(transTime)).play();			
+
+			if(updateIm)vis.update();
+			else vis.update(new Transitioner(transTime)).play();
 		}
 		
 		public function setImmediate(im:Boolean):void
 		{
-			vis.operators[2].immediate = im; // filter immediately!
+			updateIm = im;
+//			vis.operators[0].immediate = im; // filter immediately!
 		}
 	}
 }
