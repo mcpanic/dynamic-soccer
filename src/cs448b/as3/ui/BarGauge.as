@@ -36,9 +36,8 @@ package cs448b.as3.ui
 		{	
 			_playerNo = pn;
 			
-//			this.graphics.beginFill( 0xffffff, 1 );
-//            this.graphics.drawRect( 0, 0, gaugeWidth, gaugeHeight );
-//            this.graphics.endFill();
+			graphics.lineStyle(1, 0xffcccccc);
+			graphics.lineTo(0, gaugeHeight);
 			
 			initComponents();
 			buildSprite();
@@ -85,7 +84,7 @@ package cs448b.as3.ui
 		{
 			_gameType = gt; 		
 //			vis.update(new Transitioner(transTime)).play();
-			update();
+//			update();
 		}
 		
 		public function roundNo(rn:Number):void
@@ -93,7 +92,7 @@ package cs448b.as3.ui
 			_roundNo = rn;
 						
 //			vis.update(new Transitioner(transTime)).play();
-			update();
+//			update();
 		}
 		
 		public function playerNo(pnArray:Array):void
@@ -108,7 +107,7 @@ package cs448b.as3.ui
 //			var al:AxisLayout = vis.operators[2] as AxisLayout;
 //			al.xField = "data."+getTypeString(gt);
 //			vis.update(new Transitioner(transTime)).play();
-			update();
+//			update();
 		}
 		
 		public function timeCurrent(tc:Number):void
@@ -117,7 +116,7 @@ package cs448b.as3.ui
 
 //			if(updateIm)vis.update();
 //			else vis.update(new Transitioner(transTime)).play();
-			update();
+//			update();
 		}
 		
 		public function setImmediate(im:Boolean):void
@@ -126,7 +125,7 @@ package cs448b.as3.ui
 			updateIm = im;
 		}
 		
-		private function update():void
+		public function update():void
 		{
 			if(_data != null)
 			{
@@ -135,8 +134,10 @@ package cs448b.as3.ui
 			}
 		}
 		
-		private function updateSumValues():void
+		public function updateSumValues():void
 		{
+			if(_data == null) return;
+			
 			_goalSum = 0;
 			_sogSum = 0;
 			_shotSum = 0;
@@ -149,24 +150,32 @@ package cs448b.as3.ui
 			});
 		}
 		
-		private function updateBars():void
+		public function updateBars():void
 		{
-			if(updateIm) shotRect.width = gaugeWidth*_shotSum/_maxValue;
+			if(_data == null) return;
+			
+			// shot bar
+			var w:Number = _maxValue == 0 ? 0 : gaugeWidth*_shotSum/_maxValue;
+			if(updateIm) shotRect.width = w;
 			else 
 			{
-				if(_shotType == 2)new Tween(shotRect, transTime, {width:gaugeWidth*_shotSum/_maxValue}).play();
+				if(_shotType == 2)new Tween(shotRect, transTime, {width:w}).play();
 				else new Tween(shotRect, transTime, {width:0}).play();
 			}
 			
-			if(updateIm) sogRect.width = gaugeWidth*_sogSum/_maxValue;
+			// sog bar
+			w = _maxValue == 0 ? 0 : gaugeWidth*_sogSum/_maxValue
+			if(updateIm) sogRect.width = w;
 			else
 			{
-				if(_shotType != 0) new Tween(sogRect, transTime, {width:gaugeWidth*_sogSum/_maxValue}).play();
+				if(_shotType != 0) new Tween(sogRect, transTime, {width:w}).play();
 				else new Tween(sogRect, transTime, {width:0}).play();
 			}
 			
-			if(updateIm) goalRect.width = gaugeWidth*_goalSum/_maxValue;
-			else new Tween(goalRect, transTime, {width:gaugeWidth*_goalSum/_maxValue}).play();
+			// goal bar
+			w = _maxValue == 0 ? 0 : gaugeWidth*_goalSum/_maxValue
+			if(updateIm) goalRect.width = w;
+			else new Tween(goalRect, transTime, {width:w}).play();
 		}
 		
 		private function theFilter(d:DataSprite, st:Number):Boolean
@@ -219,5 +228,17 @@ package cs448b.as3.ui
 		{
 			return _shotSum;
 		}  
+		
+		public function getCurrentData():Number
+		{
+			if(_shotType == 0) return _goalSum;
+			else if(_shotType == 1) return _sogSum;
+			else return _shotSum;
+		}
+		
+		public function setMaxValue(max:Number):void
+		{
+			_maxValue = max;
+		}
 	}
 }
