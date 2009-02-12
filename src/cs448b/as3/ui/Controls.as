@@ -780,8 +780,9 @@ package cs448b.as3.ui
 			if (_roundText4) {				
 	            _roundText4.x = x-titleMarginX;
 	            _roundText4.y = y+55;				
-			}					    		
-			y = y + 90;										
+			}		
+						    		
+			y = y + 110;										
 			if (_gameType) {
 	            _gameType.x = x;
 	            _gameType.y = y+titleMarginY;
