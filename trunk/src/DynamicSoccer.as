@@ -7,6 +7,8 @@ package {
 	import cs448b.as3.ui.BarList;
 	import cs448b.as3.ui.Controls;
 	import cs448b.as3.ui.SoccerField;
+
+	import flash.system.Security;
 	
 	import flare.vis.data.Data;
 	
@@ -35,6 +37,7 @@ package {
 		 */
 		public function DynamicSoccer()
 		{	
+			Security.loadPolicyFile("http://www.stanford.edu/~juhokim/dynamicsoccer/crossdomain.xml");
 			loadData();			
 			initComponents();
 			buildSprite();
