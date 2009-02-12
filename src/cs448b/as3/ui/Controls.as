@@ -71,6 +71,7 @@ package cs448b.as3.ui
 		// Legend related
 		private var _shotLegend:Legend;
 		private var _shotLegendTitleText:TextSprite;
+		private var _shotLegendOutline:Sprite; 
 		// Shot type related
 		private var _shotTitleText:TextSprite;
 		private var _shotType:Legend;
@@ -88,6 +89,14 @@ package cs448b.as3.ui
         private var _playerBox:Array;
         private var _playerName:Array;
         private var _playerFilter:String = "All";
+
+		private var _playerNumberText:TextSprite;
+		private var _playerPositionText:TextSprite;
+		private var _playerNameText:TextSprite;
+		private var _playerGoalsText:TextSprite;
+		private var _playerShotsOnGoalText:TextSprite;
+		private var _playerShotsText:TextSprite;
+		        
 		// Speed related   		
 		private var _speedSlider:Slider;
 		private var _speedTitleText:TextSprite;
@@ -107,8 +116,9 @@ package cs448b.as3.ui
 		// Info display related
 		private var _roundText:TextSprite;
 		private var _roundText2:TextSprite;		
-		private var _playerInfoText:TextSprite;
-		private var _playerInfoText2:TextSprite;						
+		private var _roundText3:TextSprite;
+		private var _roundText4:TextSprite;				
+					
 		public function Controls()
 		{
 			pData = new PlayerData();
@@ -164,13 +174,6 @@ package cs448b.as3.ui
   		{
   			_controlListener.push(cl);
   		}
-
-		private var _playerNumberText:TextSprite;
-		private var _playerPositionText:TextSprite;
-		private var _playerNameText:TextSprite;
-		private var _playerGoalsText:TextSprite;
-		private var _playerShotsOnGoalText:TextSprite;
-		private var _playerShotsText:TextSprite;
 		
     	private function addPlayer():void
 		{
@@ -267,98 +270,41 @@ package cs448b.as3.ui
 			// sort by player number
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				_playerNameText.alpha = 0.4;
-				
-				_playerArray = null;
-				_playerArray = new Array();
 				pData.sortWithNumber();
-				for (i=0; i<PlayerData.totalPlayers; i++)
-				{
-					_playerArray.push(pData.getPlayerNumber(i));
-					_playerBox[i].label = pData.getPlayerNumber(i);				
-					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
-				}
-				//firePlayerChanged(_playerArray);
-				fireListUpdate();
+				_playerSortUpdate();
 			}).attach(_playerNumberText);	
 			// sort by player name
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				_playerPositionText.alpha = 0.4;
-				
-				_playerArray = null;
-				_playerArray = new Array();
 				pData.sortWithPosition();
-				for (i=0; i<PlayerData.totalPlayers; i++)
-				{
-					_playerArray.push(pData.getPlayerNumber(i));
-					_playerBox[i].label = pData.getPlayerNumber(i);				
-					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
-				}
-				//firePlayerChanged(_playerArray);
-				fireListUpdate();
+				_playerSortUpdate();
 			}).attach(_playerPositionText);											
 			// sort by player name
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				_playerNameText.alpha = 0.4;
-				
-				_playerArray = null;
-				_playerArray = new Array();
 				pData.sortWithName();
-				for (i=0; i<PlayerData.totalPlayers; i++)
-				{
-					_playerArray.push(pData.getPlayerNumber(i));
-					_playerBox[i].label = pData.getPlayerNumber(i);				
-					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
-				}
-				//firePlayerChanged(_playerArray);
-				fireListUpdate();
+				_playerSortUpdate();
 			}).attach(_playerNameText);
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				updateGoal();
 				_playerGoalsText.alpha = 0.4;				
-				_playerArray = null;
-				_playerArray = new Array();
 				pData.sortWithGoals();
-				for (i=0; i<PlayerData.totalPlayers; i++)
-				{
-					_playerArray.push(pData.getPlayerNumber(i));
-					_playerBox[i].label = pData.getPlayerNumber(i);				
-					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
-				}
-				//firePlayerChanged(_playerArray);
-				fireListUpdate();
+				_playerSortUpdate();
 			}).attach(_playerGoalsText);
 			// sort by player shots on goal
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				updateGoal();
 				_playerShotsOnGoalText.alpha = 0.4;				
-				_playerArray = null;
-				_playerArray = new Array();
 				pData.sortWithShotsOnGoal();
-				for (i=0; i<PlayerData.totalPlayers; i++)
-				{
-					_playerArray.push(pData.getPlayerNumber(i));
-					_playerBox[i].label = pData.getPlayerNumber(i);				
-					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
-				}
-				//firePlayerChanged(_playerArray);
-				fireListUpdate();
+				_playerSortUpdate();
 			}).attach(_playerShotsOnGoalText);			
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				updateGoal();
 				_playerShotsText.alpha = 0.4;				
-				_playerArray = null;
-				_playerArray = new Array();
 				pData.sortWithShots();
-				for (i=0; i<PlayerData.totalPlayers; i++)
-				{
-					_playerArray.push(pData.getPlayerNumber(i));
-					_playerBox[i].label = pData.getPlayerNumber(i);				
-					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
-				}
-				//firePlayerChanged(_playerArray);
-				fireListUpdate();
+				_playerSortUpdate();
 			}).attach(_playerShotsText);
 			                                                			
 			_playerBox = new Array();
@@ -426,7 +372,20 @@ package cs448b.as3.ui
 			}).attach(_playerSelect);
 
 		}
-
+		private function _playerSortUpdate():void
+		{
+			_playerArray = null;
+			_playerArray = new Array();
+			for (var i:uint =0; i<PlayerData.totalPlayers; i++)
+			{
+				_playerArray.push(pData.getPlayerNumber(i));
+				_playerBox[i].label = pData.getPlayerNumber(i);				
+				_playerName[i].htmlText = " " + pData.getPosition(i) + "  " + pData.getFirstName(i) + " " + pData.getLastName(i);
+			}
+			//firePlayerChanged(_playerArray);
+			fireListUpdate();			
+		}
+		
 		public function updatePlayerData(plData:PlayerData):void 
 		{
 			pData = null;
@@ -435,7 +394,7 @@ package cs448b.as3.ui
 			{
 				_playerArray.push(pData.getPlayerNumber(i));			
 				_playerBox[i].label = pData.getPlayerNumber(i);
-            	_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);						          	
+            	_playerName[i].htmlText = " " + pData.getPosition(i) + "  " + pData.getFirstName(i) + " " + pData.getLastName(i);						          	
 			}	
 		}
 		public function updateMatchData(maData:MatchData):void 
@@ -459,14 +418,13 @@ package cs448b.as3.ui
 			firePlayerChanged(_playerArray); //playerNo(_playerArray);
         }
 
-		private var _shotLegendOutline:Sprite; 
     	private function addLegend():void
 		{
 			// create filter
 			_shotLegend = Legend.fromValues(null, [
-				{label:"Goals",    color:LegendColors.GOAL_COLOR},
-				{label:"Shots on Goal",   color:LegendColors.SHOT_ON_GOAL_COLOR},//0xff8888ff
-				{label:"Shots", color:LegendColors.SHOT_COLOR}
+				{label:"Goals (G)",    color:LegendColors.GOAL_COLOR},
+				{label:"Shots on Goal (SG)",   color:LegendColors.SHOT_ON_GOAL_COLOR},//0xff8888ff
+				{label:"Shots (S)", color:LegendColors.SHOT_COLOR}
 			]);
 			_shotLegend.orientation = Orientation.TOP_TO_BOTTOM;
 			//_shotLegend.orientation = Orientation.LEFT_TO_RIGHT;
@@ -484,7 +442,7 @@ package cs448b.as3.ui
 			// draw outlines
 			var _shotLegendOutline:Sprite = new Sprite();
 			_shotLegendOutline.graphics.lineStyle(1, LegendColors.CONTROL_COLOR, 1);
-			_shotLegendOutline.graphics.drawRect(655, 65, 120, 85);
+			_shotLegendOutline.graphics.drawRect(630, 585, 150, 85);
 			addChild(_shotLegendOutline);					
 		}        
 	
@@ -524,13 +482,18 @@ package cs448b.as3.ui
 				if (_gameFilter == "Single")
 				{
 					_roundText.alpha = 1;
-					_roundText2.alpha = 1;					
+					_roundText2.alpha = 1;	
+					_roundText3.alpha = 1;
+					_roundText4.alpha = 1;					
 					_roundSelect.enabled = true;
+					_roundSelect.selectedIndex = 0;
 				}
 				else
 				{
 					_roundText.alpha = 0.4;
 					_roundText2.alpha = 0.4;
+					_roundText3.alpha = 0.4;
+					_roundText4.alpha = 0.4;
 					_roundSelect.enabled = false;
 				}
 			}).attach(_gameType);
@@ -559,16 +522,24 @@ package cs448b.as3.ui
 			fireRoundNo(index+1);//roundNo(_roundSelect.selectedIndex+1);
 			
 			_roundText.htmlText = Strings.format(
-				"<b>Round {0} [{1} {2}]</b>",			
+				"<b>Round {0}</b>",			
+				index+1
+			);
+
+			_roundText2.htmlText = Strings.format(
+				"<b>[{1} {2}]</b>",			
 				index+1,
 				mData.getScore(index), 
 				mData.getResult(index)
 			);
-			_roundText2.htmlText = Strings.format(
-				"{0} game vs.{1}",
-				(mData.isHome(index)? "Home":"Away"), 
+			_roundText3.htmlText = Strings.format(
+				"{0} game",
+				(mData.isHome(index)? "Home":"Away") 
+				);			
+			_roundText4.htmlText = Strings.format(
+				"vs.{0}",
 				mData.getOpponent(index)
-				);
+				);				
         }
 	
 		private function addShotType():void
@@ -724,33 +695,39 @@ package cs448b.as3.ui
             _timeCurrent.text = _timeSlider.value.toString();
             fireTimechanged(_timeSlider.value);//timeCurrent(_timeSlider.value);		
 		}
+		private var _resultOutline:Sprite;
 		
 		public function addInfo():void
 		{						
             _roundText = new TextSprite("", _sectionFormat);
             _roundText.horizontalAnchor = TextSprite.LEFT;
-            _roundText.htmlText = "Game score";
+            _roundText.htmlText = "Round";
             _roundText.alpha = 0.4;
             this.addChild( _roundText );	
                      		
-            _roundText2 = new TextSprite("", _textFormat);
+            _roundText2 = new TextSprite("", _sectionFormat);
             _roundText2.horizontalAnchor = TextSprite.LEFT;
-            _roundText2.htmlText = "   Game detail";
+            _roundText2.htmlText = "Score";
             _roundText2.alpha = 0.4;
             this.addChild( _roundText2 );	
+
+            _roundText3 = new TextSprite("", _textFormat);
+            _roundText3.horizontalAnchor = TextSprite.LEFT;
+            _roundText3.htmlText = "Home / Away";
+            _roundText3.alpha = 0.4;
+            this.addChild( _roundText3 );	
             
-				
-//            _playerInfoText = new TextSprite("", _sectionFormat);
-//            _playerInfoText.horizontalAnchor = TextSprite.LEFT;
-//            _playerInfoText.htmlText = "Player info";
-//            _playerInfoText.alpha = 0.4;
-//            this.addChild( _playerInfoText );	
-//                     		
-//            _playerInfoText2 = new TextSprite("", _textFormat);
-//            _playerInfoText2.horizontalAnchor = TextSprite.LEFT;
-//            _playerInfoText2.htmlText = "   Player detail";
-//            _playerInfoText2.alpha = 0.4;
-//            this.addChild( _playerInfoText2 );	            	
+            _roundText4 = new TextSprite("", _textFormat);
+            _roundText4.horizontalAnchor = TextSprite.LEFT;
+            _roundText4.htmlText = "Opponent";
+            _roundText4.alpha = 0.4;
+            this.addChild( _roundText4 );	
+                        
+			// draw outlines
+			var _resultOutline:Sprite = new Sprite();
+			_resultOutline.graphics.lineStyle(1, LegendColors.CONTROL_COLOR, 1);
+			_resultOutline.graphics.drawRect(650, 65, 135, 85);
+			addChild(_resultOutline);	                      	
 
 		}
 		        		
@@ -776,8 +753,8 @@ package cs448b.as3.ui
 				_awayText.y = 60; 
 			}	
 			
-			var x:Number = 670;
-			var y:Number = 90;				
+			var x:Number = 645;
+			var y:Number = 610;				
 			if (_shotLegend) {
 	            _shotLegend.x = x;
 	            _shotLegend.y = y;
@@ -786,8 +763,25 @@ package cs448b.as3.ui
 	            _shotLegendTitleText.x = x-titleMarginX;
 	            _shotLegendTitleText.y = y-titleMarginY;
 			}				
-			
-			y = y + 120;										
+			x= 670;
+		    y = 70;		
+			if (_roundText) {				
+	            _roundText.x = x-titleMarginX;
+	            _roundText.y = y;				
+			}	
+			if (_roundText2) {				
+	            _roundText2.x = x-titleMarginX;
+	            _roundText2.y = y+20;				
+			}		
+			if (_roundText3) {				
+	            _roundText3.x = x-titleMarginX;
+	            _roundText3.y = y+40;				
+			}	
+			if (_roundText4) {				
+	            _roundText4.x = x-titleMarginX;
+	            _roundText4.y = y+55;				
+			}					    		
+			y = y + 90;										
 			if (_gameType) {
 	            _gameType.x = x;
 	            _gameType.y = y+titleMarginY;
@@ -799,16 +793,9 @@ package cs448b.as3.ui
 	            _roundTitleText.x = x-titleMarginX;
 	            _roundTitleText.y = y;				
 			}	
-			if (_roundText) {				
-	            _roundText.x = x;
-	            _roundText.y = 20;				
-			}	
-			if (_roundText2) {				
-	            _roundText2.x = x;
-	            _roundText2.y = 40;				
-			}		
+	
 											
-			y = y+170;	
+			y = y+180;	
 
 			if (_shotType) {
 	            _shotType.x = x;
@@ -923,8 +910,8 @@ package cs448b.as3.ui
 				}
 			}	
 			if (_playerSelect) {
-            	_playerSelect.x = x+20;
-            	_playerSelect.y = 650;
+            	_playerSelect.x = x+30;
+            	_playerSelect.y = 660;
 			}					
 		}
 	

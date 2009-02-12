@@ -36,8 +36,7 @@ package cs448b.as3.data
 			// It has to be filled with Goal data
 			
 			playerArray.push(new Player(d.data.Number, d.data.FirstName, d.data.LastName, d.data.Position, 0, 0, 0));		
-			trace (playerArray.position);
-			//return false;
+			
 		}					
 		public function getPlayerNumber(no:Number):Number
 		{
@@ -172,19 +171,19 @@ package cs448b.as3.data
      	{
 		    var a:Number = p1.numGoals;
 		    var b:Number = p2.numGoals;
-			return _compareNumber(a, b);		
+			return _compareNumberReverse(a, b);		
      	}    
      	private function sortOnShotsOnGoal(p1:Player, p2:Player):Number
      	{
 		    var a:Number = p1.numShotsOnGoal;
 		    var b:Number = p2.numShotsOnGoal;
-			return _compareNumber(a, b);		
+			return _compareNumberReverse(a, b);		
      	}   
      	private function sortOnShots(p1:Player, p2:Player):Number
      	{
 		    var a:Number = p1.numShots;
 		    var b:Number = p2.numShots;
-			return _compareNumber(a, b);		
+			return _compareNumberReverse(a, b);		
      	}  
 		// Simple comparators     	
      	private function _compareNumber(a:Number, b:Number):Number
@@ -198,6 +197,18 @@ package cs448b.as3.data
 		        return 0;
 		    }        		
      	}
+		// Simple comparators     	
+     	private function _compareNumberReverse(a:Number, b:Number):Number
+     	{
+		    if(a > b) {
+		        return -1;
+		    } else if(a < b) {
+		        return 1;
+		    } else  {
+		        //a == b
+		        return 0;
+		    }        		
+     	}     	
      	private function _compareString(a:String, b:String):Number
      	{
 		    if(a > b) {
