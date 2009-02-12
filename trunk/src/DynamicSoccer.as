@@ -24,7 +24,6 @@ package {
 		private var soccerField:SoccerField;
 		private var barChart:BarChart;
 		private var pgArray:Array;
-//		private var playerGauge7:PlayerGauge;
 
 		private var controls:Controls;
 		private var pData:PlayerData;
@@ -67,6 +66,7 @@ package {
 			controls.addControlListener(soccerField);
 			controls.addControlListener(barChart);
 //			controls.addControlListener(playerGauge7);
+			controls.setLufunc(setPlayerNo);
 			
 			addGaugeListeners();
 			
