@@ -148,14 +148,164 @@ package cs448b.as3.ui
   			_controlListener.push(cl);
   		}
 
+		private var _playerNumberText:TextSprite;
+		private var _playerPositionText:TextSprite;
+		private var _playerNameText:TextSprite;
+		private var _playerGoalsText:TextSprite;
+		private var _playerShotsText:TextSprite;
+		
     	private function addPlayer():void
 		{
 			var i:uint;
-            
+
             _playerTitleText = new TextSprite("", _sectionFormat);
             _playerTitleText.text = "Players";
             this.addChild( _playerTitleText );	
-            			
+                        
+            _playerNumberText = new TextSprite("", _sectionFormat);
+            _playerNumberText.text = "No.";
+            _playerNumberText.buttonMode = true;
+            _playerNumberText.alpha = 0.4;
+            this.addChild( _playerNumberText );	
+
+            _playerPositionText = new TextSprite("", _sectionFormat);
+            _playerPositionText.text = "Pos.";
+            _playerPositionText.buttonMode = true;
+            _playerPositionText.alpha = 0.4;
+            this.addChild( _playerPositionText );	
+            
+            _playerNameText = new TextSprite("", _sectionFormat);
+            _playerNameText.text = "Name";
+            _playerNameText.buttonMode = true;
+            _playerNameText.alpha = 0.4;
+            this.addChild( _playerNameText );	
+
+            _playerGoalsText = new TextSprite("", _sectionFormat);
+            _playerGoalsText.text = "Goals / ";
+            _playerGoalsText.buttonMode = true;
+            _playerGoalsText.alpha = 0.4;
+            this.addChild( _playerGoalsText );	
+
+            _playerShotsText = new TextSprite("", _sectionFormat);
+            _playerShotsText.text = "Shots";
+            _playerShotsText.buttonMode = true;
+            _playerShotsText.alpha = 0.4;
+            this.addChild( _playerShotsText );	
+            
+			// change alpha value on legend mouse-over
+			new HoverControl(TextSprite, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:TextSprite = TextSprite(e.object);
+					li.alpha = 0.4;
+				}
+			).attach(_playerNumberText);
+			// change alpha value on legend mouse-over
+			new HoverControl(TextSprite, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:TextSprite = TextSprite(e.object);
+					li.alpha = 0.4;
+				}
+			).attach(_playerPositionText);			
+			// change alpha value on legend mouse-over
+			new HoverControl(TextSprite, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:TextSprite = TextSprite(e.object);
+					li.alpha = 0.4;
+				}
+			).attach(_playerNameText);
+			// change alpha value on legend mouse-over
+			new HoverControl(TextSprite, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:TextSprite = TextSprite(e.object);
+					li.alpha = 0.4;
+				}
+			).attach(_playerGoalsText);			
+			// change alpha value on legend mouse-over
+			new HoverControl(TextSprite, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:TextSprite = TextSprite(e.object);
+					li.alpha = 0.4;
+				}
+			).attach(_playerShotsText);
+			// sort by player number
+			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				_playerNameText.alpha = 0.4;
+				
+				_playerArray = null;
+				_playerArray = new Array();
+				pData.sortWithNumber();
+				for (i=0; i<PlayerData.totalPlayers; i++)
+				{
+					_playerArray.push(pData.getPlayerNumber(i));
+					_playerBox[i].label = pData.getPlayerNumber(i);				
+					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
+				}
+				//firePlayerChanged(_playerArray);
+			}).attach(_playerNumberText);	
+			// sort by player name
+			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				_playerPositionText.alpha = 0.4;
+				
+				_playerArray = null;
+				_playerArray = new Array();
+				pData.sortWithPosition();
+				for (i=0; i<PlayerData.totalPlayers; i++)
+				{
+					_playerArray.push(pData.getPlayerNumber(i));
+					_playerBox[i].label = pData.getPlayerNumber(i);				
+					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
+				}
+				//firePlayerChanged(_playerArray);
+			}).attach(_playerPositionText);											
+			// sort by player name
+			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				_playerNameText.alpha = 0.4;
+				
+				_playerArray = null;
+				_playerArray = new Array();
+				pData.sortWithName();
+				for (i=0; i<PlayerData.totalPlayers; i++)
+				{
+					_playerArray.push(pData.getPlayerNumber(i));
+					_playerBox[i].label = pData.getPlayerNumber(i);				
+					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
+				}
+				//firePlayerChanged(_playerArray);
+			}).attach(_playerNameText);
+			// sort by player shots
+			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				_playerGoalsText.alpha = 0.4;				
+				_playerArray = null;
+				_playerArray = new Array();
+				pData.sortWithGoals();
+				for (i=0; i<PlayerData.totalPlayers; i++)
+				{
+					_playerArray.push(pData.getPlayerNumber(i));
+					_playerBox[i].label = pData.getPlayerNumber(i);				
+					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
+				}
+				//firePlayerChanged(_playerArray);
+			}).attach(_playerGoalsText);
+			// sort by player shots
+			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				_playerShotsText.alpha = 0.4;				
+				_playerArray = null;
+				_playerArray = new Array();
+				pData.sortWithShots();
+				for (i=0; i<PlayerData.totalPlayers; i++)
+				{
+					_playerArray.push(pData.getPlayerNumber(i));
+					_playerBox[i].label = pData.getPlayerNumber(i);				
+					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
+				}
+				//firePlayerChanged(_playerArray);
+			}).attach(_playerShotsText);
+			                                                			
 			_playerBox = new Array();
 			_playerArray = new Array();	
 			_playerName = new Array();		
@@ -230,7 +380,7 @@ package cs448b.as3.ui
 			{
 				_playerArray.push(pData.getPlayerNumber(i));			
 				_playerBox[i].label = pData.getPlayerNumber(i);
-            	_playerName[i].htmlText = pData.getFirstName(i) + " " + pData.getLastName(i);						          	
+            	_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);						          	
 			}	
 		}
 		public function updateMatchData(maData:MatchData):void 
@@ -279,7 +429,7 @@ package cs448b.as3.ui
 			// draw outlines
 			var _shotLegendOutline:Sprite = new Sprite();
 			_shotLegendOutline.graphics.lineStyle(1, LegendColors.CONTROL_COLOR, 1);
-			_shotLegendOutline.graphics.drawRect(655, 65, 130, 85);
+			_shotLegendOutline.graphics.drawRect(655, 65, 120, 85);
 			addChild(_shotLegendOutline);					
 		}        
 	
@@ -668,7 +818,7 @@ package cs448b.as3.ui
 	            _playButton.y = y-10;		
 	            _playButton.width = 50;
 			}
-			x = 800;
+			x = 790;
 			y = 70;	
 //			if (_playerInfoText) {				
 //	            _playerInfoText.x = x;
@@ -682,19 +832,41 @@ package cs448b.as3.ui
             	_playerTitleText.x = x;
             	_playerTitleText.y = y;
 			}				
-			if (_playerSelect) {
-            	_playerSelect.x = x+20;
-            	_playerSelect.y = y+20;
+
+			if (_playerNumberText) {
+            	_playerNumberText.x = x+10;
+            	_playerNumberText.y = y+20;
+			}
+			if (_playerPositionText) {
+            	_playerPositionText.x = x+40;
+            	_playerPositionText.y = y+20;
+			}			
+			if (_playerNameText) {
+            	_playerNameText.x = x+90;
+            	_playerNameText.y = y+20;
 			}	
+			if (_playerGoalsText) {
+            	_playerGoalsText.x = x+170;
+            	_playerGoalsText.y = y+20;
+			}									
+			if (_playerShotsText) {
+            	_playerShotsText.x = x+220;
+            	_playerShotsText.y = y+20;
+			}				
+				
 			if (_playerBox) {
 				for (var i:Number=0; i<PlayerData.totalPlayers; i++)
 				{	
 					_playerBox[i].x = x;
 					_playerBox[i].y = i*20+y+40;	
-					_playerName[i].x = x+50;
+					_playerName[i].x = x+40;
 					_playerName[i].y = i*20+y+43;			
 				}
-			}			
+			}	
+			if (_playerSelect) {
+            	_playerSelect.x = x+20;
+            	_playerSelect.y = 650;
+			}					
 		}
 	
 		private function firePlayerChanged(pa:Array):void

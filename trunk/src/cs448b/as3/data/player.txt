@@ -1,28 +1,28 @@
-Number	FirstName	LastName
-1	Edwin	van der Sar
-3	Patrice	Evra
-4	Owen	Hargreaves
-5	Rio	Ferdinand
-6	Wes	Brown
-7	Cristiano	Ronaldo
-8	Anderson	Oliveira
-9	Louis	Saha
-10	Wayne	Rooney
-11	Ryan 	Giggs
-12	Ben	Foster
-13	Ji-Sung	Park
-15	Nemanja	Vidic
-16	Michael	Carrick
-17	Luis	Nani
-18	Paul	Scholes
-19	Gerard	Pique
-21	Fangzhou	Dong
-22	John	O'Shea
-24	Darren	Fletcher
-25	Danny	Simpson
-27	Mikael	Silvestre
-29	Tomasz	Kuszczak
-31	Fraizer	Campbell
-32	Carlos	Tevez
-33	Chris	Eagles
-38	Tom	Heaton
+Number	FirstName	LastName	Position
+1	Edwin	van der Sar	GK
+3	Patrice	Evra	DF
+4	Owen	Hargreaves	MF
+5	Rio	Ferdinand	DF
+6	Wes	Brown	DF
+7	Cristiano	Ronaldo	FW
+8	Anderson	Oliveira	MF
+9	Louis	Saha	FW
+10	Wayne	Rooney	FW
+11	Ryan 	Giggs	FW
+12	Ben	Foster	GK
+13	Ji-Sung	Park	MF
+15	Nemanja	Vidic	DF
+16	Michael	Carrick	DF
+17	Luis	Nani	MF
+18	Paul	Scholes	MF
+19	Gerard	Pique	DF
+21	Fangzhou	Dong	FW
+22	John	O'Shea	DF
+24	Darren	Fletcher	MF
+25	Danny	Simpson	DF
+27	Mikael	Silvestre	DF
+29	Tomasz	Kuszczak	GK
+31	Fraizer	Campbell	FW
+32	Carlos	Tevez	FW
+33	Chris	Eagles	MF
+38	Tom	Heaton	GK
