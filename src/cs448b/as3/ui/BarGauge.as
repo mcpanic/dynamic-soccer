@@ -204,5 +204,20 @@ package cs448b.as3.ui
 			else if(_timeCurrent >= d.data.Time) return true;
 			else return false;
 		}
+		
+		public function getGoals():Number
+		{
+			return _goalSum;
+		}
+		
+		public function getShotsOnGoal():Number
+		{
+			return _sogSum;
+		}
+		
+		public function getShots():Number
+		{
+			return _shotSum;
+		}  
 	}
 }
