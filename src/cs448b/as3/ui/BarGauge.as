@@ -156,7 +156,7 @@ package cs448b.as3.ui
 			
 			// shot bar
 			var w:Number = _maxValue == 0 ? 0 : gaugeWidth*_shotSum/_maxValue;
-			if(updateIm) shotRect.width = w;
+			if(updateIm) shotRect.width = _shotType == 2 ? w : 0;
 			else 
 			{
 				if(_shotType == 2)new Tween(shotRect, transTime, {width:w}).play();
@@ -165,7 +165,7 @@ package cs448b.as3.ui
 			
 			// sog bar
 			w = _maxValue == 0 ? 0 : gaugeWidth*_sogSum/_maxValue
-			if(updateIm) sogRect.width = w;
+			if(updateIm) sogRect.width = _shotType != 0 ? w : 0;
 			else
 			{
 				if(_shotType != 0) new Tween(sogRect, transTime, {width:w}).play();
