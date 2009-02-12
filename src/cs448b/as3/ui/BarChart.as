@@ -68,6 +68,11 @@ package cs448b.as3.ui
 			yLabel.x = -yLabel.width-30;
 			yLabel.y = chartHeight/2;			
 			addChild(yLabel);
+			
+			// half time line
+			graphics.lineStyle(1, 0xcccccc, 1);
+			graphics.moveTo(chartWidth/2, 0);
+			graphics.lineTo(chartWidth/2, chartHeight);
 		}
 		
 		public function initVis(d:Data = null):void

@@ -634,7 +634,7 @@ package cs448b.as3.ui
             
             _timeText = new TextSprite("", _textFormat);
             _timeText.horizontalAnchor = TextSprite.CENTER;
-            _timeText.text = " 0                 15                  30                  45                  60                  75                 90";
+            _timeText.htmlText = " 0                 15                  30                  <b>45</b>                  60                  75                 <b>90</b>";
             this.addChild( _timeText );		
 
             _timeCurrent = new TextField();
@@ -830,7 +830,7 @@ package cs448b.as3.ui
 	            _speedText2.y = y+30;
 			}
 						
-			x = 100;
+			x = 100-4;
 			y = 510;	
 			if (_timeSlider) {
 				_timeSlider.x = x;
