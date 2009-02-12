@@ -162,6 +162,7 @@ package cs448b.as3.ui
 		private var _playerPositionText:TextSprite;
 		private var _playerNameText:TextSprite;
 		private var _playerGoalsText:TextSprite;
+		private var _playerShotsOnGoalText:TextSprite;
 		private var _playerShotsText:TextSprite;
 		
     	private function addPlayer():void
@@ -191,13 +192,19 @@ package cs448b.as3.ui
             this.addChild( _playerNameText );	
 
             _playerGoalsText = new TextSprite("", _sectionFormat);
-            _playerGoalsText.text = "Goals / ";
+            _playerGoalsText.text = "G/";
             _playerGoalsText.buttonMode = true;
             _playerGoalsText.alpha = 0.4;
             this.addChild( _playerGoalsText );	
 
+            _playerShotsOnGoalText = new TextSprite("", _sectionFormat);
+            _playerShotsOnGoalText.text = "SG/";
+            _playerShotsOnGoalText.buttonMode = true;
+            _playerShotsOnGoalText.alpha = 0.4;
+            this.addChild( _playerShotsOnGoalText );	
+            
             _playerShotsText = new TextSprite("", _sectionFormat);
-            _playerShotsText.text = "Shots";
+            _playerShotsText.text = "S";
             _playerShotsText.buttonMode = true;
             _playerShotsText.alpha = 0.4;
             this.addChild( _playerShotsText );	
@@ -234,6 +241,14 @@ package cs448b.as3.ui
 					li.alpha = 0.4;
 				}
 			).attach(_playerGoalsText);			
+			// change alpha value on legend mouse-over
+			new HoverControl(TextSprite, 0,
+				function(e:SelectionEvent):void { e.object.alpha = 1; },
+				function(e:SelectionEvent):void {
+					var li:TextSprite = TextSprite(e.object);
+					li.alpha = 0.4;
+				}
+			).attach(_playerShotsOnGoalText);			
 			// change alpha value on legend mouse-over
 			new HoverControl(TextSprite, 0,
 				function(e:SelectionEvent):void { e.object.alpha = 1; },
@@ -305,6 +320,21 @@ package cs448b.as3.ui
 				//firePlayerChanged(_playerArray);
 				fireListUpdate();
 			}).attach(_playerGoalsText);
+			// sort by player shots on goal
+			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				_playerShotsOnGoalText.alpha = 0.4;				
+				_playerArray = null;
+				_playerArray = new Array();
+				pData.sortWithShotsOnGoal();
+				for (i=0; i<PlayerData.totalPlayers; i++)
+				{
+					_playerArray.push(pData.getPlayerNumber(i));
+					_playerBox[i].label = pData.getPlayerNumber(i);				
+					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
+				}
+				//firePlayerChanged(_playerArray);
+				fireListUpdate();
+			}).attach(_playerShotsOnGoalText);			
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
 				_playerShotsText.alpha = 0.4;				
@@ -861,11 +891,15 @@ package cs448b.as3.ui
             	_playerNameText.y = y+20;
 			}	
 			if (_playerGoalsText) {
-            	_playerGoalsText.x = x+170;
+            	_playerGoalsText.x = x+175;
             	_playerGoalsText.y = y+20;
-			}									
+			}	
+			if (_playerShotsOnGoalText) {
+            	_playerShotsOnGoalText.x = x+193;
+            	_playerShotsOnGoalText.y = y+20;
+			}													
 			if (_playerShotsText) {
-            	_playerShotsText.x = x+220;
+            	_playerShotsText.x = x+219;
             	_playerShotsText.y = y+20;
 			}				
 				
