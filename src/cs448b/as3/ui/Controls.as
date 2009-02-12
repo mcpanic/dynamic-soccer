@@ -38,6 +38,16 @@ package cs448b.as3.ui
 		
 		private var _controlListener:Array = new Array(2);
 
+		private var _luFunc:Function;
+		private function fireListUpdate():void
+		{
+			if(_luFunc != null)_luFunc();
+		}
+		public function setLufunc(fn:Function):void
+		{
+			_luFunc = fn;
+		}
+		
 		// Constants
 //		public static var totalPlayers:Number = 27;
 //		public static var totalRounds:Number = 38;
@@ -246,6 +256,7 @@ package cs448b.as3.ui
 					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
 				}
 				//firePlayerChanged(_playerArray);
+				fireListUpdate();
 			}).attach(_playerNumberText);	
 			// sort by player name
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
@@ -261,6 +272,7 @@ package cs448b.as3.ui
 					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
 				}
 				//firePlayerChanged(_playerArray);
+				fireListUpdate();
 			}).attach(_playerPositionText);											
 			// sort by player name
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
@@ -276,6 +288,7 @@ package cs448b.as3.ui
 					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
 				}
 				//firePlayerChanged(_playerArray);
+				fireListUpdate();
 			}).attach(_playerNameText);
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
@@ -290,6 +303,7 @@ package cs448b.as3.ui
 					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
 				}
 				//firePlayerChanged(_playerArray);
+				fireListUpdate();
 			}).attach(_playerGoalsText);
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
@@ -304,6 +318,7 @@ package cs448b.as3.ui
 					_playerName[i].htmlText = pData.getPosition(i) + " " + pData.getFirstName(i) + " " + pData.getLastName(i);
 				}
 				//firePlayerChanged(_playerArray);
+				fireListUpdate();
 			}).attach(_playerShotsText);
 			                                                			
 			_playerBox = new Array();
