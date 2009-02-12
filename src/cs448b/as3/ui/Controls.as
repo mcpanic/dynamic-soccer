@@ -43,9 +43,16 @@ package cs448b.as3.ui
 		{
 			if(_luFunc != null)_luFunc();
 		}
-		public function setLufunc(fn:Function):void
+		public function setLuFunc(fn:Function):void
 		{
 			_luFunc = fn;
+		}
+		
+		private var _guFunc:Function;
+		private function updateGoal():void{_guFunc(this);}
+		public function setGuFunc(fn:Function):void
+		{
+			_guFunc = fn;
 		}
 		
 		// Constants
@@ -307,6 +314,7 @@ package cs448b.as3.ui
 			}).attach(_playerNameText);
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				updateGoal();
 				_playerGoalsText.alpha = 0.4;				
 				_playerArray = null;
 				_playerArray = new Array();
@@ -322,6 +330,7 @@ package cs448b.as3.ui
 			}).attach(_playerGoalsText);
 			// sort by player shots on goal
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				updateGoal();
 				_playerShotsOnGoalText.alpha = 0.4;				
 				_playerArray = null;
 				_playerArray = new Array();
@@ -337,6 +346,7 @@ package cs448b.as3.ui
 			}).attach(_playerShotsOnGoalText);			
 			// sort by player shots
 			new ClickControl(TextSprite, 1, function(e:SelectionEvent):void {
+				updateGoal();
 				_playerShotsText.alpha = 0.4;				
 				_playerArray = null;
 				_playerArray = new Array();

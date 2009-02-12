@@ -109,7 +109,19 @@ package cs448b.as3.data
         	if(playerArray != null) 
         		return playerArray[index].position;
 			else return "-";  	
-     	}     	     	
+     	}    
+     	public function setNumGoals(idx:Number, g:Number):void
+     	{
+     		playerArray[idx].numGoals = g;
+     	}    
+     	public function setNumShotsOnGoal(idx:Number, g:Number):void
+     	{
+     		playerArray[idx].numShotsOnGoal = g;
+     	} 	     	    
+     	public function setNumShots(idx:Number, g:Number):void
+     	{
+     		playerArray[idx].numShots = g;
+     	} 	     	 	     	
      	public function sortWithNumber():void
      	{
      		playerArray.sort(sortOnNumber);  	     		

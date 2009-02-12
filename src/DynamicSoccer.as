@@ -66,7 +66,8 @@ package {
 			controls.addControlListener(soccerField);
 			controls.addControlListener(barChart);
 //			controls.addControlListener(playerGauge7);
-			controls.setLufunc(setPlayerNo);
+			controls.setLuFunc(setPlayerNo);
+			controls.setGuFunc(updateShotData);
 			
 			addGaugeListeners();
 			
@@ -181,6 +182,20 @@ package {
 			{
 				var pg:BarGauge = pgArray[i] as BarGauge;
 				pg.playerNumber = pData.getPlayerNumber(i);
+			}
+		}
+		
+		public function updateShotData(c:Controls):void
+		{
+			for(var i:Number = 0; i < PlayerData.totalPlayers; i++)
+			{
+				// read goal data
+				var pg:BarGauge = pgArray[i] as BarGauge;
+				
+				// Set here
+				pData.setNumGoals(i, pg.getGoals());
+				pData.setNumShotsOnGoal(i, pg.getShotsOnGoal());
+				pData.setNumShots(i, pg.getShots());
 			}
 		}
 	}
