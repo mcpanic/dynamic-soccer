@@ -26,10 +26,10 @@ package cs448b.as3.ui
 		private var offset:Number = 5;
 		
 		// colors
-		private var _fieldColor:uint = 0x5f9d47;
+		private var _fieldColor:uint = 0x799f6b;//0x5f9d47;
 		private var _fieldAlpha:Number = 1;
-		private var _lineColor:uint = 0xffffff;
-		private var _lineAlpha:Number = 0.75;
+		private var _lineColor:uint = 0xcccccc;
+		private var _lineAlpha:Number = 0.50;
 		
 		private var transTime:Number = 0.5;
 		
